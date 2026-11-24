@@ -229,7 +229,7 @@ h1{font-size:clamp(34px,5.2vw,64px);font-weight:900;letter-spacing:-.01em}
 .archive a{display:block;padding:12px 14px;border-radius:12px;border:1px solid var(--line);text-decoration:none;color:var(--tx);margin-bottom:8px} .archive a.on{border-color:var(--teal);background:rgba(94,234,212,.08)} .archive span{display:block;font-size:13px;color:var(--mut)}
 
 /* FOOT / BUDDY */
-.foot{text-align:center;padding:50px 20px 110px;color:var(--mut);font-size:14px} .foot-note{font-size:12.5px;margin-top:6px;opacity:.8}
+.foot{text-align:center;padding:50px 20px 110px;color:var(--mut);font-size:14px} .foot-credit{margin-top:8px;color:var(--tx)} .foot-note{font-size:12.5px;margin-top:6px;opacity:.8}
 .buddy{position:fixed;right:18px;bottom:18px;z-index:40;display:flex;align-items:flex-end;gap:10px;pointer-events:none}
 .buddy-btn{pointer-events:auto;width:76px;height:76px;border-radius:50%;overflow:hidden;border:3px solid var(--teal);background:linear-gradient(135deg,#1b3a7a,#0f5f6a);box-shadow:0 8px 30px rgba(34,211,238,.4);transition:.2s;padding:0}
 .buddy-btn:hover{transform:scale(1.08)} .buddy-btn img{width:100%;height:100%;object-fit:cover;object-position:top} .buddy-btn img.hop{animation:hop .5s}

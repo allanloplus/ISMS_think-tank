@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Allan's ISMS智庫｜2026 年 11 月號</title>
 <meta name="description" content="本期宣導:弱點修補進入「3·14·60」倒數時代。內部 ISMS 知識庫 × 外部法規庫 × 資安情資雷達,和 Allan 顧問、AI 助理阿拉雷一起玩小遊戲學資安。">
+<meta name="author" content="Allan Lo 顧問">
 <meta name="theme-color" content="#0a1230">
 <!-- 分享縮圖(每月由 tools/make_og.js 重新產生 og-image.png;網址請保持絕對路徑) -->
 <meta property="og:type" content="website">
@@ -255,7 +256,7 @@ h1{font-size:clamp(34px,5.2vw,64px);font-weight:900;letter-spacing:-.01em}
 .archive a{display:block;padding:12px 14px;border-radius:12px;border:1px solid var(--line);text-decoration:none;color:var(--tx);margin-bottom:8px} .archive a.on{border-color:var(--teal);background:rgba(94,234,212,.08)} .archive span{display:block;font-size:13px;color:var(--mut)}
 
 /* FOOT / BUDDY */
-.foot{text-align:center;padding:50px 20px 110px;color:var(--mut);font-size:14px} .foot-note{font-size:12.5px;margin-top:6px;opacity:.8}
+.foot{text-align:center;padding:50px 20px 110px;color:var(--mut);font-size:14px} .foot-credit{margin-top:8px;color:var(--tx)} .foot-note{font-size:12.5px;margin-top:6px;opacity:.8}
 .buddy{position:fixed;right:18px;bottom:18px;z-index:40;display:flex;align-items:flex-end;gap:10px;pointer-events:none}
 .buddy-btn{pointer-events:auto;width:76px;height:76px;border-radius:50%;overflow:hidden;border:3px solid var(--teal);background:linear-gradient(135deg,#1b3a7a,#0f5f6a);box-shadow:0 8px 30px rgba(34,211,238,.4);transition:.2s;padding:0}
 .buddy-btn:hover{transform:scale(1.08)} .buddy-btn img{width:100%;height:100%;object-fit:cover;object-position:top} .buddy-btn img.hop{animation:hop .5s}
@@ -354,6 +355,7 @@ h1{font-size:clamp(34px,5.2vw,64px);font-weight:900;letter-spacing:-.01em}
 
 <footer class="foot">
   <div><b>Allan's ISMS智庫</b> · <span id="footIssue"></span></div>
+  <div class="foot-credit">系統設計:Allan Lo 顧問 · Allan's 分享:<a href="https://www.123hi.org" target="_blank" rel="noopener">www.123hi.org</a></div>
   <div class="foot-note">本智庫內容為教育宣導用途;「烏托邦機關」為模擬組織。法規以主管機關公告之最新版本為準。</div>
 </footer>
 
@@ -1673,7 +1675,7 @@ TT.issue = {
       <div class="f-two">
         <div class="card rv"><h3>本期更新內容</h3><ul class="ticks">${I.changelog.map((c) => `<li>${esc(c)}</li>`).join("")}</ul></div>
         <div class="card rv"><h3>歷期智庫</h3><div class="archive">${TT.manifest.issues.map((m) => `<a class="${m.id === I.id ? "on" : ""}" href="?issue=${m.id}"><b>${esc(m.label)}</b><span>${esc(m.topic)} · 🎮 ${esc(m.game)}</span></a>`).join("")}</div>
-        <p class="muted small">由 Allan 顧問每月透過 Claude 彙整法規異動與情資後發行。</p></div>
+        <p class="muted small">系統設計:Allan Lo 顧問,每月彙整法規異動與情資後發行。Allan\'s 分享:<a href="https://www.123hi.org" target="_blank" rel="noopener">www.123hi.org</a></p></div>
       </div>`;
   }
 

@@ -330,7 +330,7 @@
       <div class="f-two">
         <div class="card rv"><h3>本期更新內容</h3><ul class="ticks">${I.changelog.map((c) => `<li>${esc(c)}</li>`).join("")}</ul></div>
         <div class="card rv"><h3>歷期智庫</h3><div class="archive">${TT.manifest.issues.map((m) => `<a class="${m.id === I.id ? "on" : ""}" href="?issue=${m.id}"><b>${esc(m.label)}</b><span>${esc(m.topic)} · 🎮 ${esc(m.game)}</span></a>`).join("")}</div>
-        <p class="muted small">由 Allan 顧問每月透過 Claude 彙整法規異動與情資後發行。</p></div>
+        <p class="muted small">系統設計:Allan Lo 顧問,每月彙整法規異動與情資後發行。Allan\'s 分享:<a href="https://www.123hi.org" target="_blank" rel="noopener">www.123hi.org</a></p></div>
       </div>`;
   }
 
