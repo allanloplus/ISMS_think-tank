@@ -36,8 +36,19 @@
 
   function init() {
     const I = TT.issue, O = TT.org;
-    $("#issueLabel").textContent = I.label;
+    const M = TT.manifest, isPast = I.id !== M.current, single = !!TT.inline;
+    $("#issueLabel").innerHTML = isPast ? `過往期別:<b>${esc(I.label)}</b>` : `本智庫每月更新,本期為 <b>${esc(I.label)}</b>`;
     $("#orgName").textContent = O.name + " 專屬版";
+    // 期別切換(單檔版只含一期,不提供切換)
+    const sel = $("#issueSel");
+    sel.innerHTML = M.issues.filter((m) => !single || m.id === I.id).map((m) => `<option value="${m.id}" ${m.id === I.id ? "selected" : ""}>${esc(m.label)}${m.id === M.current ? "(最新)" : ""}</option>`).join("");
+    sel.disabled = single || M.issues.length < 2;
+    sel.onchange = () => (location.href = sel.value === M.current ? location.pathname : "?issue=" + sel.value);
+    if (isPast) {
+      const cur = M.issues.find((m) => m.id === M.current);
+      $("#pastbar").innerHTML = `📚 您正在看<b>過往期別(${esc(I.label)})</b>,情資與法規重點可能已非最新。<a href="${location.pathname}">回到最新一期${cur ? ":" + esc(cur.label) : ""} →</a>`;
+      $("#pastbar").hidden = false; document.body.classList.add("past");
+    }
     $("#headline").textContent = I.headline;
     $("#heroSub").textContent = I.sub;
     $("#footIssue").textContent = I.label + " · 發行日 " + I.published;
@@ -55,6 +66,7 @@
     setupBuddy();
     bgCanvas();
     reveal();
+    if (location.hash.length > 1) setTimeout(() => { const t = document.getElementById(location.hash.slice(1)); if (t) t.scrollIntoView(); }, 150);
   }
 
   /* ───────── HERO ───────── */
@@ -192,7 +204,12 @@
 
   /* ───────── 小遊戲 ───────── */
   function renderGame(G) {
-    $("#game").innerHTML = secHead("本期小遊戲 · 每月換新", G.title, G.tagline, "arale", "cheer", "玩一局只要 2 分鐘,挑戰首席資安官!") + `<div class="game rv" id="gameRoot"></div>`;
+    $("#game").innerHTML = secHead("本期小遊戲 · 每月換新", G.title, G.tagline, "arale", "cheer", "玩一局只要 2 分鐘,挑戰首席資安官!") + `<div class="game rv" id="gameRoot"></div>
+      <div class="arcade rv"><h3>🕹 歷期小遊戲 <small>每月一款,過去的都還能玩</small></h3><div class="arcade-list">${TT.manifest.issues.map((m) => {
+        const here = m.id === TT.issue.id, latest = m.id === TT.manifest.current;
+        return here ? `<span class="on"><i>${m.gameIcon || "🎮"}</i><b>${esc(m.game)}</b><small>${esc(m.label)} · 正在玩</small></span>`
+          : TT.inline ? "" : `<a href="${latest ? location.pathname : "?issue=" + m.id}#game"><i>${m.gameIcon || "🎮"}</i><b>${esc(m.game)}</b><small>${esc(m.label)}${latest ? " · 最新" : ""} · 去玩 ▶</small></a>`;
+      }).join("")}<span class="soon"><i>✨</i><b>下個月見</b><small>新主題、新遊戲</small></span></div></div>`;
     const g = TT.games[G.type];
     if (g) g.mount($("#gameRoot"), G, TT);
     else $("#gameRoot").innerHTML = "<p class='muted'>本期遊戲模組未載入。</p>";
@@ -329,7 +346,9 @@
     $("#about").innerHTML = secHead("關於本智庫", "每月更新,持續累積", "", null) + `
       <div class="f-two">
         <div class="card rv"><h3>本期更新內容</h3><ul class="ticks">${I.changelog.map((c) => `<li>${esc(c)}</li>`).join("")}</ul></div>
-        <div class="card rv"><h3>歷期智庫</h3><div class="archive">${TT.manifest.issues.map((m) => `<a class="${m.id === I.id ? "on" : ""}" href="?issue=${m.id}"><b>${esc(m.label)}</b><span>${esc(m.topic)} · 🎮 ${esc(m.game)}</span></a>`).join("")}</div>
+        <div class="card rv"><h3>歷期智庫</h3><div class="archive">${TT.manifest.issues.map((m) => `<div class="arc ${m.id === I.id ? "on" : ""}"><div><b>${esc(m.label)}${m.id === TT.manifest.current ? ' <i class="new">最新</i>' : ""}</b><span>${esc(m.topic)} · ${m.gameIcon || "🎮"} ${esc(m.game)}</span></div>
+          ${TT.inline ? "" : `<div class="arc-btns">${m.id === I.id ? "<em>目前顯示</em>" : `<a href="${m.id === TT.manifest.current ? location.pathname : "?issue=" + m.id}">線上看</a>`}<a href="dist/Allans-ISMS-ThinkTank-${m.id}.html" target="_blank" rel="noopener" title="當月完整封存版,含當時的法規庫與內部文件">單檔封存版 ↗</a></div>`}</div>`).join("")}</div>
+        <p class="muted small">線上版的法規庫與內部文件一律顯示最新狀態;要看當月原貌請開「單檔封存版」。</p>
         <p class="muted small">系統設計:Allan Lo 顧問,每月彙整法規異動與情資後發行。Allan\'s 分享:<a href="https://www.123hi.org" target="_blank" rel="noopener">www.123hi.org</a></p></div>
       </div>`;
   }
