@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Allan's ISMS智庫｜2026 年 11 月號</title>
+<meta name="description" content="本期宣導:弱點修補進入「3·14·60」倒數時代。內部 ISMS 知識庫 × 外部法規庫 × 資安情資雷達,和 Allan 顧問、AI 助理阿拉雷一起玩小遊戲學資安。">
+<meta name="theme-color" content="#0a1230">
+<!-- 分享縮圖(每月由 tools/make_og.js 重新產生 og-image.png;網址請保持絕對路徑) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Allan's ISMS智庫">
+<meta property="og:title" content="Allan's ISMS智庫｜2026 年 11 月號:弱點修補「3·14·60」倒數時代">
+<meta property="og:description" content="資安署新指引一次看懂 + 期限試算器 + 小遊戲「弱點急診室」。內部 ISMS、外部法規、情資一站搜尋。">
+<meta property="og:url" content="https://allanloplus.github.io/ISMS_think-tank/">
+<meta property="og:image" content="https://allanloplus.github.io/ISMS_think-tank/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Allan's ISMS智庫 — Allan 顧問與 AI 助理阿拉雷">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://allanloplus.github.io/ISMS_think-tank/og-image.png">
+<link rel="icon" type="image/png" href="assets/img/favicon.png">
+<link rel="apple-touch-icon" href="assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#top"><span class="brand-mark">A</span><span>Allan's <b>ISMS智庫</b></span></a>
+  <nav class="nav-links" id="navLinks">
+    <a href="#feature">本期宣導</a>
+    <a href="#game">小遊戲</a>
+    <a href="#policy">政策與目標</a>
+    <a href="#internal">內部 ISMS</a>
+    <a href="#external">外部法規</a>
+    <a href="#intel">情資雷達</a>
+  </nav>
+  <button class="nav-search" id="navSearch" aria-label="搜尋"><svg viewBox="0 0 24 24" width="18" height="18"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>搜尋</span><kbd>/</kbd></button>
+  <button class="nav-burger" id="burger" aria-label="選單"><i></i><i></i><i></i></button>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <div class="issue-chip"><span class="dot"></span><span id="issueLabel"></span><span class="sep">·</span><span id="orgName"></span></div>
+      <h1><span class="h1-site">Allan's ISMS智庫</span><span class="h1-head" id="headline"></span></h1>
+      <p class="hero-sub" id="heroSub"></p>
+      <form class="searchbar" id="heroSearch" role="search">
+        <svg viewBox="0 0 24 24" width="22" height="22"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="heroQ" type="search" placeholder="搜尋內部 ISMS 文件、法規、情資…例如「弱點」「通報」「個資」" autocomplete="off">
+        <button type="submit">搜尋</button>
+      </form>
+      <div class="quick" id="quick"></div>
+      <div class="stats" id="stats"></div>
+    </div>
+    <div class="stage" id="stage">
+      <div class="bubble" id="bubble"><span class="who" id="bubbleWho"></span><p id="bubbleText"></p><button id="bubbleNext" aria-label="下一句">▶</button></div>
+      <div class="actors">
+        <figure class="actor allan" id="actorAllan"><img src="assets/img/chars/allan-full.webp" alt="Allan 顧問"><figcaption>Allan 顧問</figcaption></figure>
+        <figure class="actor arale" id="actorArale"><img src="assets/img/chars/arale-full.webp" alt="AI 助理阿拉雷"><figcaption>AI 助理 阿拉雷</figcaption></figure>
+      </div>
+      <div class="stage-floor"></div>
+    </div>
+  </section>
+
+  <section id="feature" class="sec"></section>
+  <section id="game" class="sec"></section>
+  <section id="policy" class="sec"></section>
+  <section id="internal" class="sec"></section>
+  <section id="external" class="sec"></section>
+  <section id="intel" class="sec"></section>
+  <section id="about" class="sec"></section>
+</main>
+
+<footer class="foot">
+  <div><b>Allan's ISMS智庫</b> · <span id="footIssue"></span></div>
+  <div class="foot-note">本智庫內容為教育宣導用途;「烏托邦機關」為模擬組織。法規以主管機關公告之最新版本為準。</div>
+</footer>
+
+<!-- 浮動助理 -->
+<div class="buddy" id="buddy">
+  <div class="buddy-tip" id="buddyTip"></div>
+  <button class="buddy-btn" id="buddyBtn" aria-label="阿拉雷小幫手"><img id="buddyImg" src="assets/img/chars/arale-wink.webp" alt=""></button>
+</div>
+
+<!-- 搜尋面板 -->
+<div class="overlay" id="searchOv" hidden>
+  <div class="search-panel" role="dialog" aria-label="智庫搜尋">
+    <div class="sp-head">
+      <svg viewBox="0 0 24 24" width="22" height="22"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input id="q" type="search" placeholder="輸入關鍵字,空白分隔可多條件" autocomplete="off">
+      <button class="x" data-close>✕</button>
+    </div>
+    <div class="sp-scopes" id="scopes"></div>
+    <div class="sp-body" id="results"></div>
+  </div>
+</div>
+
+<!-- 內容視窗 -->
+<div class="overlay" id="modalOv" hidden>
+  <div class="modal" role="dialog"><button class="x" data-close>✕</button><div id="modalBody"></div></div>
+</div>
+
+<script src="data/manifest.js"></script>
+<script src="data/org.js"></script>
+<script src="data/internal-docs.js"></script>
+<script src="data/regulations.js"></script>
+<script src="assets/js/games/vuln-triage.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
