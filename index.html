@@ -40,15 +40,18 @@
     <a href="#external">外部法規</a>
     <a href="#intel">情資雷達</a>
   </nav>
+  <label class="issue-sel" title="切換期別"><span>期別</span><select id="issueSel" aria-label="切換期別"></select></label>
   <button class="nav-search" id="navSearch" aria-label="搜尋"><svg viewBox="0 0 24 24" width="18" height="18"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>搜尋</span><kbd>/</kbd></button>
   <button class="nav-burger" id="burger" aria-label="選單"><i></i><i></i><i></i></button>
 </header>
+<div class="pastbar" id="pastbar" hidden></div>
 
 <main id="top">
   <!-- HERO -->
   <section class="hero">
     <div class="hero-text">
-      <div class="issue-chip"><span class="dot"></span><span id="issueLabel"></span><span class="sep">·</span><span id="orgName"></span></div>
+      <a class="issue-chip" href="#about" title="查看歷期智庫"><span class="dot"></span><span id="issueLabel"></span><span class="more">歷期 ▾</span></a>
+      <div class="org-chip" id="orgName"></div>
       <h1><span class="h1-site">Allan's ISMS智庫</span><span class="h1-head" id="headline"></span></h1>
       <p class="hero-sub" id="heroSub"></p>
       <form class="searchbar" id="heroSearch" role="search">
