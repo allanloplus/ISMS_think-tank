@@ -103,6 +103,17 @@
     say(0);
   }
 
+  /* 手機版長清單:先顯示前 6 筆,其餘按「顯示全部」展開(桌機不受影響,由 CSS 控制) */
+  function more(sel) {
+    const el = $(sel); el.classList.add("lim"); el.classList.remove("all");
+    const old = el.nextElementSibling;
+    if (old && old.classList.contains("more-btn")) old.hidden = true, old.className = "";
+    const n = el.children.length; if (n <= 6) return;
+    const b = document.createElement("button"); b.className = "more-btn"; b.textContent = `顯示全部 ${n} 筆 ▾`;
+    b.onclick = () => { el.classList.add("all"); b.hidden = true; b.className = ""; };
+    el.after(b);
+  }
+
   const secHead = (kicker, title, desc, who, f, line) => `
     <div class="sec-head rv">
       <div><div class="kicker">${esc(kicker)}</div><h2>${esc(title)}</h2>${desc ? `<p>${esc(desc)}</p>` : ""}</div>
@@ -114,7 +125,7 @@
     const V = TT.vuln;
     const rows = F.table.map((d, i) => {
       const b = [(i & 8) === 0, (i & 4) === 0, (i & 2) === 0, (i & 1) === 0];
-      return `<tr data-t="${i + 1}"><td>${i + 1}</td>${b.map((x, k) => `<td class="${x ? "y" : "n"}">${k === 3 ? (x ? "完全" : "部分") : x ? "是" : "否"}</td>`).join("")}<td><span class="dl ${V.cls(d)}">${V.label(d)}</span></td></tr>`;
+      return `<tr data-t="${i + 1}"><td>${i + 1}</td>${b.map((x, k) => `<td class="${x ? "y" : "n"}">${k === 3 ? (x ? "完全" : "部分") : x ? "是" : "否"}</td>`).join("")}<td><span class="dl ${V.cls(d)}">${d ? d + " 天" : "下次更新"}</span></td></tr>`;
     }).join("");
     $("#feature").innerHTML = secHead(F.tag, F.title, `${F.issuer} · ${F.issued}`, "allan", "point", "這份指引要寫進 ISMS 程序書,稽核會看紀錄!") + `
     <div class="f-grid">
@@ -269,7 +280,7 @@
     const draw = () => {
       const list = TT.docs.filter((d) => (tier === "0" || (tier === "u" ? d.updated === TT.issue.id : d.tier === +tier)) && (!kw || JSON.stringify(d).toLowerCase().includes(kw)));
       $("#docList").innerHTML = list.map(docCard).join("") || "<p class='muted'>沒有符合的文件。</p>";
-      $$("#docList .rv").forEach((e) => e.classList.add("in"));
+      $$("#docList .rv").forEach((e) => e.classList.add("in")); more("#docList");
     };
     $$("#tierTabs button").forEach((b) => (b.onclick = () => { tier = b.dataset.t; $$("#tierTabs button").forEach((x) => x.classList.toggle("on", x === b)); draw(); }));
     $("#docFilter").oninput = (e) => { kw = e.target.value.trim().toLowerCase(); draw(); };
@@ -304,7 +315,7 @@
       const s = S.find((x) => x.id === id);
       $("#sectorDesc").innerHTML = s ? `<b>${esc(s.name)}</b> — ${esc(s.desc)}` : "";
       $("#regList").innerHTML = R.filter((r) => r.sector === id).map(regCard).join("");
-      $$("#regList .rv").forEach((e) => e.classList.add("in"));
+      $$("#regList .rv").forEach((e) => e.classList.add("in")); more("#regList");
     };
     $$("#sectorTabs button").forEach((b) => (b.onclick = () => { $$("#sectorTabs button").forEach((x) => x.classList.toggle("on", x === b)); draw(b.dataset.s); }));
     if (S[0]) draw(S[0].id);
@@ -335,9 +346,11 @@
           <div class="it-h"><time>${x.date}</time><span class="cat">${esc(x.cat)}</span>${x.hot ? '<span class="hotb">重點</span>' : ""}${x.v === "partial" ? '<span class="pv" title="僅依媒體摘要,未讀到原始公告">待覆核</span>' : ""}</div>
           <h3>${esc(x.title)}</h3><p>${esc(x.summary)}</p>
           <div class="act"><b>建議行動</b>${esc(x.action)}</div>
-          <div class="src">${x.src.map((s) => `<a href="${esc(s.u)}" target="_blank" rel="noopener">${esc(s.n)} ↗</a>`).join("")}</div></article>`).join("");
+          <div class="src">${x.src.map((s) => `<a href="${esc(s.u)}" target="_blank" rel="noopener">${esc(s.n)} ↗</a>`).join("")}</div><span class="it-more">展開全文與來源 ▾</span></article>`).join("");
+      more("#intelList");
     };
     $$("#intelTabs button").forEach((b) => (b.onclick = () => { $$("#intelTabs button").forEach((x) => x.classList.toggle("on", x === b)); draw(b.dataset.c); }));
+    $("#intelList").onclick = (e) => { const it = e.target.closest(".it"); if (it && !e.target.closest("a")) it.classList.toggle("open"); };
     draw("全部");
   }
 
@@ -401,6 +414,8 @@
   function closeOv() { $("#searchOv").hidden = true; $("#modalOv").hidden = true; document.body.classList.remove("lock"); }
   function jump(sel) {
     const el = $(sel); if (!el) return;
+    const lim = el.closest(".lim"); if (lim) lim.classList.add("all");
+    if (el.classList.contains("it")) el.classList.add("open");
     el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
     el.classList.add("flash"); setTimeout(() => el.classList.remove("flash"), 1800);
   }
@@ -448,6 +463,12 @@
     const io = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting && show(e.target.id || "top")), { rootMargin: "-45% 0px -45% 0px" });
     $$("main > section").forEach((s) => io.observe(s));
     $("#buddyBtn").onclick = () => openSearch();
+    // 手機:試算器與遊戲進入畫面時讓小幫手退場,避免蓋住結果與按鈕(由 CSS 限定只在窄螢幕生效)
+    const busy = new Set(), hide = new IntersectionObserver((es) => {
+      es.forEach((e) => (e.isIntersecting ? busy.add(e.target) : busy.delete(e.target)));
+      document.body.classList.toggle("nobuddy", busy.size > 0);
+    }, { rootMargin: "-25% 0px -25% 0px" });
+    ["#eval", "#gameRoot"].forEach((s) => $(s) && hide.observe($(s)));
     TT.buddy = (f, text) => { cur = ""; img.src = face("arale", f); tip.textContent = text; tip.classList.add("show"); clearTimeout(hideT); hideT = setTimeout(() => tip.classList.remove("show"), 5000); };
   }
 

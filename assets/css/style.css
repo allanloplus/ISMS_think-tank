@@ -224,6 +224,7 @@ h1{font-size:clamp(32px,4.5vw,56px);font-weight:900;letter-spacing:-.01em}
 .sectors button:hover{border-color:#fff} .sectors button.on{background:linear-gradient(135deg,rgba(94,234,212,.25),rgba(96,165,250,.15));border-color:var(--teal)}
 .sector-desc{margin:16px 0;padding:14px 18px;border-radius:14px;background:rgba(251,191,36,.08);border-left:3px solid var(--yel);font-size:14.5px}
 
+.more-btn{display:none} .it-more{display:none}
 /* INTEL */
 .trends{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}
 .trends div{padding:14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
@@ -275,10 +276,46 @@ h1{font-size:clamp(32px,4.5vw,56px);font-weight:900;letter-spacing:-.01em}
   .nav-links{position:fixed;top:60px;left:12px;right:12px;flex-direction:column;background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:10px;display:none} .nav-links.open{display:flex} .nav-links a{font-size:16px;padding:10px 14px}
   .nav-burger{display:flex} .issue-sel{margin-left:auto} .issue-sel span{display:none} .nav-search span,.nav-search kbd{display:none}
 }
+@media(max-width:1020px){
+  /* 試算結果固定在畫面下緣,切換答案時不必往下捲 */
+  .eval{overflow:visible} .eval-q{border-radius:22px 22px 0 0}
+  .eval-r{position:sticky;bottom:0;z-index:5;display:grid;grid-template-columns:auto auto 1fr;align-items:center;gap:4px 14px;padding:12px 16px;text-align:left;border-radius:0 0 22px 22px;border-top:1px solid var(--teal);box-shadow:0 -10px 30px rgba(0,0,0,.5)}
+  .r-face img{width:54px;height:54px;border-width:2px} .r-type{font-size:12px;line-height:1.3} .r-type b{font-size:20px;display:block}
+  .r-days{display:flex;align-items:baseline;gap:8px} .r-days b{font-size:46px;display:inline} .r-days span{font-size:15px}
+  .r-note{grid-column:1/-1;font-size:12.5px;padding:7px 10px;line-height:1.5} .r-path{display:none}
+}
 @media(max-width:640px){
+  html{scroll-padding-top:66px} body{font-size:15.5px}
+  .sec{padding-top:46px} .sec-head{margin-bottom:18px;gap:14px} .card{padding:18px} .hero{padding-bottom:10px;gap:10px}
+  .issue-chip .more{display:none} .org-chip{margin-top:-10px}
+  .aside-say img{width:56px;height:56px} .aside-say span{font-size:13.5px}
+  .stage-floor{margin-top:-30px} .bubble{margin:0 0 20px;min-height:96px} .bubble p{font-size:15.5px}
+  /* 表一:不橫向捲動,六欄全部塞進螢幕 */
+  .tbl-wrap{padding:16px 10px} .tbl-wrap summary{padding:0 6px} .tbl{min-width:0;font-size:13px;table-layout:fixed} .tbl th{font-size:10.5px;padding:6px 1px} .tbl td{padding:7px 1px} .tbl th:first-child{width:34px} .tbl th:last-child{width:86px} .dl{padding:2px 8px;font-size:12px}
+  /* 頁籤、產業別、趨勢:改成單列左右滑 */
+  .tabs,.sectors,.trends{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:8px;margin-left:-16px;margin-right:-16px;padding:2px 16px 8px;scroll-snap-type:x proximity;scrollbar-width:none} .tabs::-webkit-scrollbar,.sectors::-webkit-scrollbar,.trends::-webkit-scrollbar{display:none}
+  .tabs button{flex:none;white-space:nowrap} .sectors button{flex:none;min-width:118px;padding:10px 12px;scroll-snap-align:start} .sectors i{font-size:20px}
+  .trends div{flex:none;width:72%;scroll-snap-align:start}
+  .toolbar{gap:8px} .filter{width:100%}
+  /* 卡片精簡 + 先顯示 6 筆 */
+  .lim:not(.all)>*:nth-child(n+7){display:none}
+  .more-btn{display:block;width:100%;margin-top:12px;padding:12px;border-radius:14px;border:1px dashed var(--teal);color:var(--teal);font-weight:700}
+  .docs,.regs,.intel{gap:10px} .doc,.reg{padding:14px 16px;gap:3px} .doc b,.reg b{font-size:15.5px} .doc p,.reg p{-webkit-line-clamp:2;font-size:13px} .doc-meta{padding-top:2px}
+  .it{padding:16px} .it h3{font-size:16px} .it:not(.open) p{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden} .it:not(.open) .src{display:none}
+  .it-more{display:block;font-size:12.5px;color:var(--teal);margin-top:8px} .it.open .it-more{display:none} .act{font-size:13.5px}
+  /* 政策四原則:橫式精簡 */
+  .cia-i{display:grid;grid-template-columns:46px 1fr;gap:0 10px;padding:14px;align-items:start} .cia-i i{grid-row:span 3;font-size:36px} .cia-i b{font-size:16px} .cia-i small{font-size:12px} .cia-i p{margin-top:4px}
+  .obj{padding:12px} .slogan{font-size:21px} .policy-main p{font-size:15px}
+  .mit-i{padding:8px 10px} .todo label{padding:10px;font-size:14px}
+  .g-char{width:110px;height:110px;border-radius:22px} .g-intro h3{font-size:23px} .g-card{padding:14px 16px} .g-card h3{font-size:18px} .g-card p{font-size:14.5px} .g-opt{padding:12px 6px} .g-opt b{font-size:28px}
+  .g-case{flex-direction:row;align-items:flex-start;gap:10px} .g-case .g-char{width:52px;height:52px;border-width:2px} .game{padding:14px;min-height:0} .g-opts{gap:8px;margin-top:12px} .g-bar{margin-bottom:12px} .g-next{margin-top:12px}
+  .buddy-btn{width:54px;height:54px} .buddy{right:12px;bottom:12px;transition:opacity .25s} body.nobuddy .buddy{opacity:0;pointer-events:none} body.nobuddy .buddy-btn{pointer-events:none}
+  .arcade-list>*{min-width:0;flex:1 1 100%}
+  .overlay{padding:10px 10px 0;align-items:flex-end} .search-panel,.modal{max-height:90vh;border-radius:22px 22px 0 0} .search-panel{height:90vh} .modal{padding:24px 18px 30px} .modal h2{font-size:21px}
+  .foot{padding-bottom:90px}
   .countdown{grid-template-columns:1fr 1fr} .cd b{font-size:46px} .todo-list,.commit,.objs,.cia{grid-template-columns:1fr} .sectors{grid-template-columns:1fr 1fr}
   .q{grid-template-columns:1fr} .seg{justify-self:start;margin-left:42px} .aside-say{max-width:none}
-  .g-intro,.g-end{flex-direction:column;text-align:center} .g-how{text-align:left} .g-case{flex-direction:column;align-items:center} .g-case .g-char{width:84px;height:84px} .g-opts{grid-template-columns:1fr 1fr} .g-btns{justify-content:center}
+  .g-intro,.g-end{flex-direction:column;text-align:center} .g-how{text-align:left} .g-opts{grid-template-columns:1fr 1fr} .g-btns{justify-content:center}
   .issue-sel{display:none} .nav-search{margin-left:auto} .issue-chip{font-size:14.5px;padding:8px 14px;gap:8px} .pastbar{font-size:13px}
   .searchbar button{padding:10px 16px} .buddy-tip{display:none} .buddy-btn{width:62px;height:62px} .stats b{font-size:28px} .trends{grid-template-columns:1fr}
 }
