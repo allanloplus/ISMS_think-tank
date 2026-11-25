@@ -71,14 +71,6 @@
     setupBuddy();
     bgCanvas();
     reveal();
-    // 風格預覽切換列:網址帶 ?theme= 時才出現
-    const th = new URLSearchParams(location.search).get("theme");
-    if (th) {
-      const T = [["dark", "深色(現行)"], ["light", "A 晨光白"], ["paper", "B 公文米"], ["mint", "C 薄荷糖"], ["gov", "D 藍白官方"]];
-      const bar = document.createElement("div"); bar.className = "theme-bar";
-      bar.innerHTML = "<b>🎨 風格預覽</b>" + T.map(([k, n]) => `<a class="${k === th ? "on" : ""}" href="?theme=${k}">${n}</a>`).join("");
-      document.body.appendChild(bar);
-    }
     if (location.hash.length > 1) setTimeout(() => { const t = document.getElementById(location.hash.slice(1)); if (t) t.scrollIntoView(); }, 150);
   }
 

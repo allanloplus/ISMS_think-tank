@@ -62,6 +62,12 @@ Allan 的優化版程序文件在他本機 `D:\AI_Project\ISMS2027_Allan版\ISMS
 (保留欄位結構:`id, tier, title, ver, date, owner, iso, summary, points, forms, tags`),並把 `org.simulated` 改為 `false`。
 多客戶時:每個客戶一組 `org.js` + `internal-docs.js`,其餘共用。
 
+## 視覺風格
+
+- 預設為淺色「晨光白」(`<html data-theme="light">`,變數在 `style.css` 末段);原深色版保留在 `:root`,網址加 `?theme=dark` 可看。
+- 新增樣式時顏色一律用 CSS 變數(`--tx`、`--card`、`--teal`、`rgba(var(--ovc),…)` 等),不要寫死色碼,兩種主題才都正常。
+- 分享縮圖配色在 `tools/make_og.js`,跟著淺色主題;`og.nums` 的顏色要用深一點的色碼。
+
 ## 內容原則
 
 - 法規數字(期限、時數、罰鍰、條號)必須有來源;尚未施行的條文要明講「尚未施行」,不可寫成現行義務。

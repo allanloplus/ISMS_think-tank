@@ -364,7 +364,7 @@ h1{font-size:clamp(32px,4.5vw,56px);font-weight:900;letter-spacing:-.01em}
 @media print{#bg,.nav,.buddy,.stage,.game{display:none} body{background:var(--bubble);color:#000} .rv{opacity:1;transform:none}}
 
 
-/* ════════ 主題(?theme=名稱 預覽;正式採用時把變數搬進 :root 或在 <html> 加 data-theme) ════════ */
+/* ════════ 主題:<html data-theme="light"> 為預設「晨光白」;:root 的深色原值以 ?theme=dark 啟用 ════════ */
 /* 淺色主題共用 */
 [data-theme]:not([data-theme="dark"]){
   --hi:#0b1740; --on-accent:#fff; --on-yel:#fff; --on-pill:#fff; --paper:#fff; --paper-tx:#0c1638; --paper-bd:rgba(var(--lnc),.25);
@@ -378,7 +378,7 @@ h1{font-size:clamp(32px,4.5vw,56px);font-weight:900;letter-spacing:-.01em}
 [data-theme]:not([data-theme="dark"]) .bubble .who img{background:#dbeafe}
 [data-theme]:not([data-theme="dark"]) .g-opt.right{color:var(--hi)} [data-theme]:not([data-theme="dark"]) .eval-r .r-note{color:var(--tx)}
 
-/* A 晨光白:乾淨明亮的現代 SaaS 感 */
+/* 晨光白(預設):乾淨明亮的白底、青綠主色 */
 [data-theme="light"]{
   --bg:#f3f6fc; --bg2:#fff; --card:#fff; --card2:#eef3fb; --tx:#17264f; --tx2:#33416b; --mut:#5d6d92; --chip-tx:#1e3a8a;
   --teal:#0d9488; --teal2:#0891b2; --yel:#b45309; --blue:#2563eb;
@@ -386,44 +386,6 @@ h1{font-size:clamp(32px,4.5vw,56px);font-weight:900;letter-spacing:-.01em}
   --ava:linear-gradient(135deg,#bfdbfe,#99f6e4); --nav-bg:rgba(255,255,255,.9); --card-bg:#fff; --panel-bg:linear-gradient(170deg,#e3faf5,#eaf1ff);
   --body-bg:radial-gradient(1100px 650px at 88% -8%,#d5e4ff 0%,transparent 60%),radial-gradient(900px 600px at -10% 15%,#d2f7ef 0%,transparent 55%),var(--bg);
 }
-/* B 公文米:暖色紙感,穩重正式 */
-[data-theme="paper"]{
-  --bg:#f5efe3; --bg2:#fffdf7; --card:#fffdf7; --card2:#f3ead9; --tx:#2c261b; --tx2:#4b4131; --mut:#7b6f5c; --chip-tx:#1e3a5f; --hi:#1d170d;
-  --teal:#1d4e89; --teal2:#2a6bb3; --yel:#a8520b; --blue:#1d4e89; --d0:#1d4e89;
-  --ovc:90,65,20; --shc:110,85,45; --lnc:100,75,30; --tc:29,78,137; --yc:190,110,20; --ptc:150,120,70;
-  --bubble:#2c261b; --bubble-who:#f4c56b; --ava:linear-gradient(135deg,#e7d6b5,#c9dcf0); --ava-solid:#efe3cb;
-  --nav-bg:rgba(255,253,247,.92); --card-bg:#fffdf7; --panel-bg:linear-gradient(170deg,#f1e7d2,#e6edf6); --r:10px;
-  --body-bg:linear-gradient(180deg,#efe6d4 0,#f5efe3 420px),var(--bg);
-}
-[data-theme="paper"] h1,[data-theme="paper"] h2,[data-theme="paper"] .slogan,[data-theme="paper"] .g-rank{font-family:"Noto Serif TC","Songti TC","PMingLiU",serif}
-[data-theme="paper"] .sec-head{border-bottom:2px solid var(--tx);padding-bottom:14px}
-/* C 薄荷糖:粉彩漸層 + 玻璃卡片,活潑親切 */
-[data-theme="mint"]{
-  --bg:#eefaf7; --bg2:#fff; --card:#ffffff; --card2:#e4f6f2; --tx:#143447; --tx2:#2c4b5c; --mut:#5b7886; --chip-tx:#155e75; --hi:#0b2a3a;
-  --teal:#0f9d8f; --teal2:#06a8cf; --yel:#d97706; --blue:#3b82f6;
-  --ovc:15,90,110; --shc:40,110,130; --lnc:20,110,130; --tc:15,157,143; --yc:245,158,11; --ptc:6,168,207;
-  --bubble:#0f3d4a; --bubble-who:#5eead4; --ava:linear-gradient(135deg,#a7f3d0,#fde68a); --ava-solid:#d1fae5;
-  --nav-bg:rgba(255,255,255,.75); --card-bg:rgba(255,255,255,.78); --panel-bg:linear-gradient(170deg,#d6f7ef,#fff3d1); --r:26px;
-  --body-bg:linear-gradient(135deg,#dff8f1 0%,#e6f0ff 45%,#fff4d6 100%);
-}
-[data-theme="mint"] .card,[data-theme="mint"] .doc,[data-theme="mint"] .reg,[data-theme="mint"] .it,[data-theme="mint"] .obj,[data-theme="mint"] .lt-col{backdrop-filter:blur(10px);background:var(--card-bg)}
-/* D 藍白官方:政府入口網風格,方正清楚 */
-[data-theme="gov"]{
-  --bg:#eef2f8; --bg2:#fff; --card:#fff; --card2:#e7eef9; --tx:#1b2a44; --tx2:#35455f; --mut:#5f6f88; --chip-tx:#14408a; --hi:#0d1f3c;
-  --teal:#1557b0; --teal2:#2f74d0; --yel:#c2410c; --blue:#1557b0; --d0:#1557b0;
-  --ovc:20,60,130; --shc:40,70,130; --lnc:20,60,130; --tc:21,87,176; --yc:234,88,12; --ptc:21,87,176;
-  --bubble:#123a7a; --bubble-who:#bfdbfe; --ava:linear-gradient(135deg,#bfdbfe,#dbeafe); --ava-solid:#dbeafe;
-  --nav-bg:rgba(255,255,255,.95); --card-bg:#fff; --panel-bg:linear-gradient(170deg,#dfeafc,#f3f7fd); --r:8px;
-  --body-bg:linear-gradient(180deg,#d6e4fa 0,#eef2f8 560px),var(--bg);
-}
-[data-theme="gov"] .nav{background:#123a7a;border-bottom:3px solid #c2410c} [data-theme="gov"] .nav .brand,[data-theme="gov"] .nav-links a,[data-theme="gov"] .nav-search,[data-theme="gov"] .issue-sel{color:#fff}
-[data-theme="gov"] .nav .brand b,[data-theme="gov"] .issue-sel select{color:#ffd9a8} [data-theme="gov"] .nav-burger i{background:#fff}
-[data-theme="gov"] .btn,[data-theme="gov"] .searchbar button,[data-theme="gov"] .tabs button,[data-theme="gov"] .issue-chip,[data-theme="gov"] .searchbar{border-radius:8px}
-@media(max-width:1020px){[data-theme="gov"] .nav-links a{color:var(--tx)}}
-
-/* 風格預覽切換列(只有網址帶 ?theme= 時出現) */
-.theme-bar{position:fixed;left:14px;bottom:14px;z-index:60;display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:14px;background:#0b1430;color:#fff;font-size:13px;box-shadow:0 8px 30px rgba(0,0,0,.4);flex-wrap:wrap;max-width:calc(100vw - 100px)}
-.theme-bar b{margin-right:4px} .theme-bar a{padding:4px 10px;border-radius:99px;color:#cfe0ff;text-decoration:none;border:1px solid rgba(255,255,255,.25);white-space:nowrap} .theme-bar a.on{background:#5eead4;color:#04121b;border-color:#5eead4;font-weight:700}
 [data-theme]:not([data-theme="dark"]) .cia-i,[data-theme]:not([data-theme="dark"]) .cd,[data-theme]:not([data-theme="dark"]) .g-opt{background:var(--card)}
 [data-theme]:not([data-theme="dark"]) .seg,[data-theme]:not([data-theme="dark"]) .lt-tabs{background:var(--card2)}
 [data-theme]:not([data-theme="dark"]) .cd.d3::after{opacity:.5}
