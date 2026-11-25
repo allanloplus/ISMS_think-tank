@@ -36,6 +36,7 @@
           <div class="g-opts">${OPTS.map((d) => `<button class="g-opt ${V.cls(d)}" data-d="${d}"><b>${d || "↻"}</b><span>${d ? "天" : "下次更新"}</span></button>`).join("")}</div>
           <div class="g-next" id="gNext"></div>`;
         root.querySelectorAll(".g-opt").forEach((b) => (b.onclick = () => answer(+b.dataset.d)));
+        if (window.innerWidth <= 640) root.scrollIntoView({ block: "start" }); // 手機:每題把遊戲框對齊畫面頂端,選項與下一題按鈕才不會掉到畫面外
         const bar = root.querySelector("#gBar");
         clearInterval(tick);
         tick = setInterval(() => { left -= 0.1; bar.style.width = Math.max(0, (left / cfg.seconds) * 100) + "%"; bar.classList.toggle("hurry", left < 7); if (left <= 0) answer(-1); }, 100);
@@ -53,6 +54,7 @@
         const last = i === deck.length - 1;
         root.querySelector("#gNext").innerHTML = `<button class="btn">${last ? "看成績 🏁" : "下一位病患 ▶"}</button>`;
         root.querySelector("#gNext button").onclick = () => (last ? finish() : (i++, round()));
+        if (window.innerWidth <= 640) root.querySelector("#gNext").scrollIntoView({ block: "nearest", behavior: "smooth" });
       }
       function finish() {
         const pct = right / deck.length, prev = best(); save(score);
