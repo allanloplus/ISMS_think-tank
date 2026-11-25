@@ -86,6 +86,10 @@ h1{font-size:clamp(32px,4.5vw,56px);font-weight:900;letter-spacing:-.01em}
 .quick{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13.5px;color:var(--mut)}
 .quick button{padding:4px 12px;border-radius:99px;border:1px solid var(--line);color:var(--tx);font-size:13.5px;transition:.2s}
 .quick button:hover{border-color:var(--teal);color:var(--teal)}
+.hero-cta{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap}
+.hero-cta a{display:flex;align-items:center;gap:12px;padding:12px 20px 12px 14px;border-radius:16px;text-decoration:none;color:var(--tx);border:1px solid var(--line);background:rgba(255,255,255,.05);transition:.2s}
+.hero-cta a:first-child{border-color:rgba(251,191,36,.55);background:rgba(251,191,36,.1)} .hero-cta a:last-child{border-color:rgba(94,234,212,.55);background:rgba(94,234,212,.1)}
+.hero-cta a:hover{transform:translateY(-3px);box-shadow:var(--sh)} .hero-cta i{font-style:normal;font-size:26px} .hero-cta b{display:block;font-size:15.5px;line-height:1.3} .hero-cta small{font-size:12.5px;color:var(--mut)}
 .stats{display:flex;gap:clamp(16px,3vw,40px);margin-top:34px;flex-wrap:wrap}
 .stats b{display:block;font:700 34px var(--fn);color:#fff} .stats span{font-size:13px;color:var(--mut)}
 
@@ -127,6 +131,24 @@ h1{font-size:clamp(32px,4.5vw,56px);font-weight:900;letter-spacing:-.01em}
 .sub{font-size:20px;margin:36px 0 16px} .sub small{font-size:13px;color:var(--mut);font-weight:400}
 .note{background:rgba(96,165,250,.1);border-left:3px solid var(--blue);padding:12px 16px;border-radius:8px;margin-top:16px}
 
+/* LATEST */
+.lt-tabs{display:none}
+.lt-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+.lt-col{border-radius:22px;padding:22px;border:1px solid var(--line);background:var(--card)}
+.lt-col.law{border-top:4px solid var(--yel)} .lt-col.news{border-top:4px solid var(--teal)}
+.lt-col h3{display:flex;align-items:center;gap:10px;font-size:20px;margin-bottom:14px} .lt-col h3 i{font-style:normal;font-size:24px}
+.lt-col h3 small{margin-left:auto;font-size:12px;font-weight:500;padding:3px 12px;border-radius:99px;white-space:nowrap} .law h3 small{background:rgba(251,191,36,.18);color:var(--yel)} .news h3 small{background:rgba(94,234,212,.15);color:var(--teal)}
+.lt-list{list-style:none;margin:0;padding:0}
+.lt-list li{display:grid;grid-template-columns:58px 1fr;gap:12px;padding:12px 8px;border-top:1px solid rgba(148,197,255,.1);border-radius:10px;transition:.15s} .lt-list li:hover{background:rgba(255,255,255,.04)}
+.lt-list li.hot{background:linear-gradient(90deg,rgba(251,113,133,.14),transparent)}
+.lt-list time{font:500 11px var(--fn);color:var(--mut);text-align:center;line-height:1.2} .lt-list time b{display:block;font-size:17px;color:#fff}
+.lt-title{display:block;color:var(--tx);text-decoration:none;font-weight:500;line-height:1.5;font-size:15.5px} .lt-title:hover{color:var(--teal);text-decoration:underline}
+.lt-meta{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-top:5px;font-size:12.5px;color:var(--mut)} .lt-meta a{white-space:nowrap}
+.st{font-style:normal;font-weight:700;font-size:11.5px;padding:1px 9px;border-radius:99px;white-space:nowrap}
+.st-pub{background:rgba(251,191,36,.22);color:var(--yel)} .st-on{background:rgba(52,211,153,.2);color:var(--ok)} .st-draft{background:rgba(96,165,250,.2);color:#bcd6ff} .st-wait{background:rgba(251,146,60,.2);color:var(--d14)} .st-cat{background:rgba(94,234,212,.15);color:var(--teal)}
+.lt-watch{margin-top:14px;padding:14px 16px;border-radius:14px;background:rgba(251,146,60,.08);border:1px dashed rgba(251,146,60,.5)} .lt-watch h4{margin:0 0 8px;font-size:14px;color:var(--d14)}
+.lt-watch ul{list-style:none;margin:0;padding:0;font-size:14px} .lt-watch li{display:grid;grid-template-columns:104px 1fr;gap:10px;padding:5px 0;line-height:1.5} .lt-watch b{color:var(--d14);font-size:12.5px;padding-top:2px} .lt-watch a{color:var(--tx)}
+.lt-all{display:block;margin-top:14px;text-align:center;padding:10px;border-radius:12px;background:rgba(255,255,255,.05);text-decoration:none;font-size:14px;font-weight:500} .lt-all:hover{background:rgba(255,255,255,.1)}
 /* FEATURE */
 .f-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:16px}
 .f-two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
@@ -299,7 +321,7 @@ h1{font-size:clamp(32px,4.5vw,56px);font-weight:900;letter-spacing:-.01em}
 /* RWD */
 @media(max-width:1020px){
   .hero{grid-template-columns:1fr;padding-top:96px;min-height:0} .stage{min-height:0;margin-top:10px}
-  .f-grid,.f-two,.eval,.intel{grid-template-columns:1fr} .objs,.cia{grid-template-columns:1fr 1fr} .trends{grid-template-columns:1fr 1fr} .sectors{grid-template-columns:repeat(3,1fr)}
+  .f-grid,.f-two,.eval,.intel,.lt-grid{grid-template-columns:1fr} .objs,.cia{grid-template-columns:1fr 1fr} .trends{grid-template-columns:1fr 1fr} .sectors{grid-template-columns:repeat(3,1fr)}
   .nav-links{position:fixed;top:60px;left:12px;right:12px;flex-direction:column;background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:10px;display:none} .nav-links.open{display:flex} .nav-links a{font-size:16px;padding:10px 14px}
   .nav-burger{display:flex} .issue-sel{margin-left:auto} .issue-sel span{display:none} .nav-search span,.nav-search kbd{display:none}
 }
@@ -313,6 +335,13 @@ h1{font-size:clamp(32px,4.5vw,56px);font-weight:900;letter-spacing:-.01em}
 }
 @media(max-width:640px){
   html{scroll-padding-top:66px} body{font-size:15.5px}
+  .hero-cta{gap:8px;margin-top:18px} .hero-cta a{flex:1 1 0;padding:10px;gap:8px;min-width:0} .hero-cta i{font-size:22px} .hero-cta b{font-size:14px} .hero-cta small{font-size:11px} .stats{margin-top:22px}
+  /* 最新動態:手機用頁籤切換兩欄,一次只看一邊 */
+  .lt-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;border-radius:16px;background:rgba(0,0,0,.35);margin-bottom:12px;position:sticky;top:62px;z-index:6}
+  .lt-tabs button{padding:10px 4px;border-radius:12px;font-weight:700;font-size:14px;color:var(--mut)} .lt-tabs button i{font-style:normal;font-size:12px;opacity:.7}
+  .lt-tabs button.on[data-pane="law"]{background:var(--yel);color:#1a1300} .lt-tabs button.on[data-pane="news"]{background:var(--teal);color:#04121b}
+  .lt-grid.show-law .news,.lt-grid.show-news .law{display:none}
+  .lt-col{padding:14px 12px} .lt-col h3{font-size:17px} .lt-list li{grid-template-columns:46px 1fr;gap:8px;padding:10px 4px} .lt-list time b{font-size:15px} .lt-title{font-size:14.5px} .lt-watch li{grid-template-columns:1fr;gap:0}
   .sec{padding-top:46px} .sec-head{margin-bottom:18px;gap:14px} .card{padding:18px} .hero{padding-bottom:10px;gap:10px}
   .issue-chip .more{display:none} .org-chip{margin-top:-10px}
   .aside-say img{width:56px;height:56px} .aside-say span{font-size:13.5px}
@@ -356,6 +385,7 @@ h1{font-size:clamp(32px,4.5vw,56px);font-weight:900;letter-spacing:-.01em}
 <header class="nav" id="nav">
   <a class="brand" href="#top"><span class="brand-mark">A</span><span>Allan's <b>ISMS智庫</b></span></a>
   <nav class="nav-links" id="navLinks">
+    <a href="#latest">最新動態</a>
     <a href="#feature">本期宣導</a>
     <a href="#game">小遊戲</a>
     <a href="#policy">政策與目標</a>
@@ -383,6 +413,7 @@ h1{font-size:clamp(32px,4.5vw,56px);font-weight:900;letter-spacing:-.01em}
         <button type="submit">搜尋</button>
       </form>
       <div class="quick" id="quick"></div>
+      <div class="hero-cta" id="heroCta"></div>
       <div class="stats" id="stats"></div>
     </div>
     <div class="stage" id="stage">
@@ -395,6 +426,7 @@ h1{font-size:clamp(32px,4.5vw,56px);font-weight:900;letter-spacing:-.01em}
     </div>
   </section>
 
+  <section id="latest" class="sec"></section>
   <section id="feature" class="sec"></section>
   <section id="game" class="sec"></section>
   <section id="policy" class="sec"></section>
@@ -1314,6 +1346,31 @@ TT.issue = {
     ]
   },
 
+  /* ───────── 首頁「最新動態」左欄:近期法令法規異動(政府機關最關心) ─────────
+     date: 發布/生效日;st: 已發布|已施行|已生效|預告中|待施行|即將生效;who: 適用對象
+     reg: 對應 regulations.js 的 id(點標題開啟重點);url: 官方或原始來源;v: "partial" = 待覆核
+     右欄的資安情資直接取用下方 intel(排除「法規政策」類),不必另外維護。 */
+  lawUpdates: [
+    { date: "2026-11-11", st: "已發布", who: "電商/數位服務", title: "數發部「五大防護行動」:重大警訊 72 小時內修補、通報並通知當事人", reg: "D02", url: "https://moda.gov.tw/ACS/press/news/press/21422" },
+    { date: "2026-11-06", st: "已發布", who: "公務機關/特定非公務機關", hot: true, title: "各機關基於風險導向之弱點處置期限評估指引(3/14/60 天)", reg: "G03", url: "https://moda.gov.tw/ACS/operations/aisec/21256" },
+    { date: "2026-11-06", st: "已發布", who: "能源/水資源/科學園區", title: "經濟部所管特定非公務機關資通安全管理作業辦法修正發布", reg: "C02", url: "https://icsda.org.tw/", v: "partial" },
+    { date: "2026-10-13", st: "預告中", who: "金融業", title: "金管會「金融業運用代理 AI 安全諮詢文件」徵詢意見", reg: "F06", url: "https://cna.com.tw/news/afe/202610130306.aspx", v: "partial" },
+    { date: "2026-09-11", st: "已生效", who: "輸歐數位產品", title: "EU Cyber Resilience Act 弱點與事件通報義務開始適用", reg: "X05", url: "https://digital-strategy.ec.europa.eu/en/policies/cra-reporting" },
+    { date: "2026-09-02", st: "預告中", who: "關鍵基礎設施醫院", title: "衛福部所管特定非公務機關資通安全管理作業辦法修正草案預告", reg: "M03", url: "https://www.mohw.gov.tw/", v: "partial" },
+    { date: "2026-07-07", st: "已發布", who: "各機關/全產業", title: "數發部「人工智慧風險分類框架 v1.0」", reg: "G10", url: "https://www-api.moda.gov.tw/File/Get/moda/zh-tw/UieEfux5Yv0iJuR" },
+    { date: "2026-05-26", st: "已發布", who: "保險業", title: "保險業內控辦法修正:資安長與專責單位適用範圍擴大", reg: "F02", url: "https://www.fsc.gov.tw/ch/home.jsp?id=2&parentpath=0&mcustomize=news_view.jsp&dataserno=202605260002&dtable=News" },
+    { date: "2026-01-14", st: "已施行", who: "各機關/全產業", title: "人工智慧基本法公布施行;政府使用 AI 須風險評估並訂內控規範", reg: "G09", url: "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=H0160093" },
+    { date: "2026-01-07", st: "已施行", who: "公務機關/特定非公務機關", title: "資安法六部子法修正:責任等級分級辦法、通報應變及演練辦法等(兩部更名)", reg: "G02", url: "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=A0030304" },
+    { date: "2025-12-01", st: "已施行", who: "公務機關/特定非公務機關", title: "資通安全管理法全文修正施行:條號全面變動、資安長法制化", reg: "G01", url: "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=A0030297" }
+  ],
+  /* 追蹤中:尚未生效但要先準備的項目 */
+  lawWatch: [
+    { when: "2026/12/2", title: "EU AI Act 新增禁止項目生效、生成式內容標記寬限期屆至", reg: "X04" },
+    { when: "最快 2026 年底", title: "資安署 AI Agent 安全指引(約 60~70 項控制措施)", url: "https://money.udn.com/money/story/7307/9888953" },
+    { when: "2027 年初前", title: "各機關依 AI 基本法完成 AI 內控規範", reg: "G09" },
+    { when: "施行日未定", title: "個資法 114 年修正條文(個資保護長、事故通報主管機關)——個資會仍在籌備", reg: "G08" }
+  ],
+
   /* ───────── 情資雷達(由查證結果填入) ───────── */
   intel: [
     { date: "2026-11-06", cat: "法規政策", hot: true, title: "資安署發布《各機關基於風險導向之弱點處置期限評估指引》",
@@ -1453,6 +1510,7 @@ TT.issue = {
     $("#footIssue").textContent = I.label + " · 發行日 " + I.published;
     document.title = `Allan's ISMS智庫｜${I.label}`;
     renderHero(I);
+    renderLatest(I);
     renderFeature(I.feature);
     renderGame(I.game);
     renderPolicy(O);
@@ -1518,6 +1576,38 @@ TT.issue = {
       <div><div class="kicker">${esc(kicker)}</div><h2>${esc(title)}</h2>${desc ? `<p>${esc(desc)}</p>` : ""}</div>
       ${who ? `<div class="aside-say ${who}"><img src="${face(who, f)}" alt="${NAMES[who]}"><span>${esc(line)}</span></div>` : ""}
     </div>`;
+
+  /* ───────── 最新動態(首頁):法規異動 × 資安情資 ───────── */
+  const md = (d) => d.slice(5).replace("-", "/");
+  function renderLatest(I) {
+    const laws = (I.lawUpdates || []).slice().sort((a, b) => b.date.localeCompare(a.date));
+    const news = I.intel.map((x, i) => ({ x, i })).filter(({ x }) => x.cat !== "法規政策" && x.cat !== "標準動態").sort((a, b) => b.x.date.localeCompare(a.x.date));
+    $("#heroCta").innerHTML = `<a href="#latest" data-pane="law"><i>🏛</i><span><b>法令法規異動</b><small>政府機關必看 · ${laws.length} 則</small></span></a><a href="#latest" data-pane="news"><i>🏢</i><span><b>重要資安情資</b><small>民間企業必看 · ${news.length} 則</small></span></a>`;
+    const st = (s) => `<em class="st st-${{ 已發布: "pub", 已施行: "on", 已生效: "on", 預告中: "draft", 待施行: "wait", 即將生效: "wait" }[s] || "pub"}">${esc(s)}</em>`;
+    const lawRow = (u) => `<li class="${u.hot ? "hot" : ""}"><time>${u.date.slice(0, 4)}<b>${md(u.date)}</b></time><div>
+        <a class="lt-title" href="#" ${u.reg ? `data-reg="${u.reg}"` : ""}>${esc(u.title)}</a>
+        <div class="lt-meta">${st(u.st)}<span>${esc(u.who)}</span>${u.v === "partial" ? '<span class="pv">待覆核</span>' : ""}${u.url ? `<a href="${esc(u.url)}" target="_blank" rel="noopener">${u.v === "partial" ? "參考來源" : "官方來源"} ↗</a>` : ""}</div></div></li>`;
+    const newsRow = ({ x, i }) => `<li class="${x.hot ? "hot" : ""}"><time>${x.date.slice(0, 4)}<b>${md(x.date)}</b></time><div>
+        <a class="lt-title" href="#intel-${i}" data-intel="${i}">${esc(x.title)}</a>
+        <div class="lt-meta"><em class="st st-cat">${esc(x.cat)}</em>${x.v === "partial" ? '<span class="pv">待覆核</span>' : ""}${x.src[0] ? `<a href="${esc(x.src[0].u)}" target="_blank" rel="noopener">${esc(x.src[0].n)} ↗</a>` : ""}</div></div></li>`;
+    const watch = (I.lawWatch || []).map((w) => `<li><b>${esc(w.when)}</b>${w.reg ? `<a href="#" data-reg="${w.reg}">${esc(w.title)}</a>` : w.url ? `<a href="${esc(w.url)}" target="_blank" rel="noopener">${esc(w.title)} ↗</a>` : esc(w.title)}</li>`).join("");
+    $("#latest").innerHTML = secHead("最新動態 · " + I.label, "近期法規異動與資安情資", "政府機關先看左邊,民間企業先看右邊;點標題看重點,點來源看原文。", "arale", "explain", "每月更新一次,這裡永遠是最新的!") + `
+      <div class="lt-tabs rv" id="ltTabs"><button class="on" data-pane="law">🏛 法令法規異動 <i>${laws.length}</i></button><button data-pane="news">🏢 重要資安情資 <i>${news.length}</i></button></div>
+      <div class="lt-grid show-law" id="ltGrid">
+        <div class="lt-col law rv"><h3><i>🏛</i>近期法令法規異動<small>政府機關最關心</small></h3>
+          <ul class="lt-list" id="ltLaw">${laws.map(lawRow).join("")}</ul>
+          ${watch ? `<div class="lt-watch"><h4>⏳ 追蹤中:還沒生效,但要先準備</h4><ul>${watch}</ul></div>` : ""}
+          <a class="lt-all" href="#external">看完整外部法規庫(${(TT.regs || []).length} 項,可依產業別查)→</a></div>
+        <div class="lt-col news rv"><h3><i>🏢</i>近期重要資安情資<small>民間企業最關心</small></h3>
+          <ul class="lt-list" id="ltNews">${news.map(newsRow).join("")}</ul>
+          <a class="lt-all" href="#intel">看全部情資與建議行動(${I.intel.length} 則)→</a></div>
+      </div>`;
+    more("#ltLaw"); more("#ltNews");
+    const pane = (p) => { $("#ltGrid").className = "lt-grid show-" + p; $$("#ltTabs button").forEach((b) => b.classList.toggle("on", b.dataset.pane === p)); };
+    $$("#ltTabs button").forEach((b) => (b.onclick = () => pane(b.dataset.pane)));
+    $$("#heroCta a").forEach((a) => a.addEventListener("click", () => pane(a.dataset.pane)));
+    $("#ltNews").addEventListener("click", (e) => { const a = e.target.closest("[data-intel]"); if (a) { e.preventDefault(); jump("#intel-" + a.dataset.intel); } });
+  }
 
   /* ───────── 本期宣導 ───────── */
   function renderFeature(F) {
@@ -1773,6 +1863,7 @@ TT.issue = {
     const add = (o) => INDEX.push(Object.assign(o, { hay: (o.title + " " + (o.tags || "") + " " + o.text).toLowerCase() }));
     TT.docs.forEach((d) => add({ scope: "internal", kind: d.id, title: d.title, tags: (d.tags || []).join(" ") + " " + d.id, text: [d.summary].concat(d.points, d.forms || [], d.iso).join(" "), go: () => openDoc(d.id) }));
     (TT.regs || []).forEach((r) => { const s = (TT.sectors || []).find((x) => x.id === r.sector) || {}; add({ scope: "external", kind: s.name || "法規", title: r.title, tags: r.auth + " " + (r.tags || []).join(" "), text: r.points.join(" "), go: () => openReg(r.id) }); });
+    (I.lawUpdates || []).forEach((u) => add({ scope: "external", kind: "法規異動 · " + u.st, title: u.title, tags: u.date + " " + u.who, text: u.who + " " + u.st + " " + u.date, go: () => (u.reg ? openReg(u.reg) : jump("#latest")) }));
     I.intel.forEach((x, i) => add({ scope: "intel", kind: x.cat, title: x.title, tags: x.date, text: x.summary + " " + x.action, go: () => jump("#intel-" + i) }));
     add({ scope: "issue", kind: "本期宣導", title: F.title, tags: "弱點 修補 期限 KEV 3天 14天 60天", text: [F.why, F.basis, F.definition].concat(F.scope, F.indicators.map((x) => x.name + x.q + x.tip), F.rules.map((r) => r.h + r.t)).join(" "), go: () => jump("#feature") });
     F.mitigations.forEach((m) => add({ scope: "issue", kind: "補償性控制", title: m.name, text: m.text, go: () => jump("#feature .mit") }));
@@ -1843,6 +1934,7 @@ TT.issue = {
   function setupBuddy() {
     const tips = {
       top: ["wink", "嗨!我是阿拉雷,點我可以直接搜尋智庫喔!"],
+      latest: ["surprised", "公務機關看法規異動,企業看資安情資,都在這!"],
       feature: ["explain", "試試看試算器:把四個答案切一切,期限會跟著變!"],
       game: ["cheer", "弱點急診室開張!看你能拿幾分~"],
       policy: ["think", "考考你:資安政策的四個原則是哪四個?"],

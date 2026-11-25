@@ -97,6 +97,31 @@ TT.issue = {
     ]
   },
 
+  /* ───────── 首頁「最新動態」左欄:近期法令法規異動(政府機關最關心) ─────────
+     date: 發布/生效日;st: 已發布|已施行|已生效|預告中|待施行|即將生效;who: 適用對象
+     reg: 對應 regulations.js 的 id(點標題開啟重點);url: 官方或原始來源;v: "partial" = 待覆核
+     右欄的資安情資直接取用下方 intel(排除「法規政策」類),不必另外維護。 */
+  lawUpdates: [
+    { date: "2026-11-11", st: "已發布", who: "電商/數位服務", title: "數發部「五大防護行動」:重大警訊 72 小時內修補、通報並通知當事人", reg: "D02", url: "https://moda.gov.tw/ACS/press/news/press/21422" },
+    { date: "2026-11-06", st: "已發布", who: "公務機關/特定非公務機關", hot: true, title: "各機關基於風險導向之弱點處置期限評估指引(3/14/60 天)", reg: "G03", url: "https://moda.gov.tw/ACS/operations/aisec/21256" },
+    { date: "2026-11-06", st: "已發布", who: "能源/水資源/科學園區", title: "經濟部所管特定非公務機關資通安全管理作業辦法修正發布", reg: "C02", url: "https://icsda.org.tw/", v: "partial" },
+    { date: "2026-10-13", st: "預告中", who: "金融業", title: "金管會「金融業運用代理 AI 安全諮詢文件」徵詢意見", reg: "F06", url: "https://cna.com.tw/news/afe/202610130306.aspx", v: "partial" },
+    { date: "2026-09-11", st: "已生效", who: "輸歐數位產品", title: "EU Cyber Resilience Act 弱點與事件通報義務開始適用", reg: "X05", url: "https://digital-strategy.ec.europa.eu/en/policies/cra-reporting" },
+    { date: "2026-09-02", st: "預告中", who: "關鍵基礎設施醫院", title: "衛福部所管特定非公務機關資通安全管理作業辦法修正草案預告", reg: "M03", url: "https://www.mohw.gov.tw/", v: "partial" },
+    { date: "2026-07-07", st: "已發布", who: "各機關/全產業", title: "數發部「人工智慧風險分類框架 v1.0」", reg: "G10", url: "https://www-api.moda.gov.tw/File/Get/moda/zh-tw/UieEfux5Yv0iJuR" },
+    { date: "2026-05-26", st: "已發布", who: "保險業", title: "保險業內控辦法修正:資安長與專責單位適用範圍擴大", reg: "F02", url: "https://www.fsc.gov.tw/ch/home.jsp?id=2&parentpath=0&mcustomize=news_view.jsp&dataserno=202605260002&dtable=News" },
+    { date: "2026-01-14", st: "已施行", who: "各機關/全產業", title: "人工智慧基本法公布施行;政府使用 AI 須風險評估並訂內控規範", reg: "G09", url: "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=H0160093" },
+    { date: "2026-01-07", st: "已施行", who: "公務機關/特定非公務機關", title: "資安法六部子法修正:責任等級分級辦法、通報應變及演練辦法等(兩部更名)", reg: "G02", url: "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=A0030304" },
+    { date: "2025-12-01", st: "已施行", who: "公務機關/特定非公務機關", title: "資通安全管理法全文修正施行:條號全面變動、資安長法制化", reg: "G01", url: "https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=A0030297" }
+  ],
+  /* 追蹤中:尚未生效但要先準備的項目 */
+  lawWatch: [
+    { when: "2026/12/2", title: "EU AI Act 新增禁止項目生效、生成式內容標記寬限期屆至", reg: "X04" },
+    { when: "最快 2026 年底", title: "資安署 AI Agent 安全指引(約 60~70 項控制措施)", url: "https://money.udn.com/money/story/7307/9888953" },
+    { when: "2027 年初前", title: "各機關依 AI 基本法完成 AI 內控規範", reg: "G09" },
+    { when: "施行日未定", title: "個資法 114 年修正條文(個資保護長、事故通報主管機關)——個資會仍在籌備", reg: "G08" }
+  ],
+
   /* ───────── 情資雷達(由查證結果填入) ───────── */
   intel: [
     { date: "2026-11-06", cat: "法規政策", hot: true, title: "資安署發布《各機關基於風險導向之弱點處置期限評估指引》",

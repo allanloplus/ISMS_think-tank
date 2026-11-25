@@ -54,6 +54,7 @@
     $("#footIssue").textContent = I.label + " · 發行日 " + I.published;
     document.title = `Allan's ISMS智庫｜${I.label}`;
     renderHero(I);
+    renderLatest(I);
     renderFeature(I.feature);
     renderGame(I.game);
     renderPolicy(O);
@@ -119,6 +120,38 @@
       <div><div class="kicker">${esc(kicker)}</div><h2>${esc(title)}</h2>${desc ? `<p>${esc(desc)}</p>` : ""}</div>
       ${who ? `<div class="aside-say ${who}"><img src="${face(who, f)}" alt="${NAMES[who]}"><span>${esc(line)}</span></div>` : ""}
     </div>`;
+
+  /* ───────── 最新動態(首頁):法規異動 × 資安情資 ───────── */
+  const md = (d) => d.slice(5).replace("-", "/");
+  function renderLatest(I) {
+    const laws = (I.lawUpdates || []).slice().sort((a, b) => b.date.localeCompare(a.date));
+    const news = I.intel.map((x, i) => ({ x, i })).filter(({ x }) => x.cat !== "法規政策" && x.cat !== "標準動態").sort((a, b) => b.x.date.localeCompare(a.x.date));
+    $("#heroCta").innerHTML = `<a href="#latest" data-pane="law"><i>🏛</i><span><b>法令法規異動</b><small>政府機關必看 · ${laws.length} 則</small></span></a><a href="#latest" data-pane="news"><i>🏢</i><span><b>重要資安情資</b><small>民間企業必看 · ${news.length} 則</small></span></a>`;
+    const st = (s) => `<em class="st st-${{ 已發布: "pub", 已施行: "on", 已生效: "on", 預告中: "draft", 待施行: "wait", 即將生效: "wait" }[s] || "pub"}">${esc(s)}</em>`;
+    const lawRow = (u) => `<li class="${u.hot ? "hot" : ""}"><time>${u.date.slice(0, 4)}<b>${md(u.date)}</b></time><div>
+        <a class="lt-title" href="#" ${u.reg ? `data-reg="${u.reg}"` : ""}>${esc(u.title)}</a>
+        <div class="lt-meta">${st(u.st)}<span>${esc(u.who)}</span>${u.v === "partial" ? '<span class="pv">待覆核</span>' : ""}${u.url ? `<a href="${esc(u.url)}" target="_blank" rel="noopener">${u.v === "partial" ? "參考來源" : "官方來源"} ↗</a>` : ""}</div></div></li>`;
+    const newsRow = ({ x, i }) => `<li class="${x.hot ? "hot" : ""}"><time>${x.date.slice(0, 4)}<b>${md(x.date)}</b></time><div>
+        <a class="lt-title" href="#intel-${i}" data-intel="${i}">${esc(x.title)}</a>
+        <div class="lt-meta"><em class="st st-cat">${esc(x.cat)}</em>${x.v === "partial" ? '<span class="pv">待覆核</span>' : ""}${x.src[0] ? `<a href="${esc(x.src[0].u)}" target="_blank" rel="noopener">${esc(x.src[0].n)} ↗</a>` : ""}</div></div></li>`;
+    const watch = (I.lawWatch || []).map((w) => `<li><b>${esc(w.when)}</b>${w.reg ? `<a href="#" data-reg="${w.reg}">${esc(w.title)}</a>` : w.url ? `<a href="${esc(w.url)}" target="_blank" rel="noopener">${esc(w.title)} ↗</a>` : esc(w.title)}</li>`).join("");
+    $("#latest").innerHTML = secHead("最新動態 · " + I.label, "近期法規異動與資安情資", "政府機關先看左邊,民間企業先看右邊;點標題看重點,點來源看原文。", "arale", "explain", "每月更新一次,這裡永遠是最新的!") + `
+      <div class="lt-tabs rv" id="ltTabs"><button class="on" data-pane="law">🏛 法令法規異動 <i>${laws.length}</i></button><button data-pane="news">🏢 重要資安情資 <i>${news.length}</i></button></div>
+      <div class="lt-grid show-law" id="ltGrid">
+        <div class="lt-col law rv"><h3><i>🏛</i>近期法令法規異動<small>政府機關最關心</small></h3>
+          <ul class="lt-list" id="ltLaw">${laws.map(lawRow).join("")}</ul>
+          ${watch ? `<div class="lt-watch"><h4>⏳ 追蹤中:還沒生效,但要先準備</h4><ul>${watch}</ul></div>` : ""}
+          <a class="lt-all" href="#external">看完整外部法規庫(${(TT.regs || []).length} 項,可依產業別查)→</a></div>
+        <div class="lt-col news rv"><h3><i>🏢</i>近期重要資安情資<small>民間企業最關心</small></h3>
+          <ul class="lt-list" id="ltNews">${news.map(newsRow).join("")}</ul>
+          <a class="lt-all" href="#intel">看全部情資與建議行動(${I.intel.length} 則)→</a></div>
+      </div>`;
+    more("#ltLaw"); more("#ltNews");
+    const pane = (p) => { $("#ltGrid").className = "lt-grid show-" + p; $$("#ltTabs button").forEach((b) => b.classList.toggle("on", b.dataset.pane === p)); };
+    $$("#ltTabs button").forEach((b) => (b.onclick = () => pane(b.dataset.pane)));
+    $$("#heroCta a").forEach((a) => a.addEventListener("click", () => pane(a.dataset.pane)));
+    $("#ltNews").addEventListener("click", (e) => { const a = e.target.closest("[data-intel]"); if (a) { e.preventDefault(); jump("#intel-" + a.dataset.intel); } });
+  }
 
   /* ───────── 本期宣導 ───────── */
   function renderFeature(F) {
@@ -374,6 +407,7 @@
     const add = (o) => INDEX.push(Object.assign(o, { hay: (o.title + " " + (o.tags || "") + " " + o.text).toLowerCase() }));
     TT.docs.forEach((d) => add({ scope: "internal", kind: d.id, title: d.title, tags: (d.tags || []).join(" ") + " " + d.id, text: [d.summary].concat(d.points, d.forms || [], d.iso).join(" "), go: () => openDoc(d.id) }));
     (TT.regs || []).forEach((r) => { const s = (TT.sectors || []).find((x) => x.id === r.sector) || {}; add({ scope: "external", kind: s.name || "法規", title: r.title, tags: r.auth + " " + (r.tags || []).join(" "), text: r.points.join(" "), go: () => openReg(r.id) }); });
+    (I.lawUpdates || []).forEach((u) => add({ scope: "external", kind: "法規異動 · " + u.st, title: u.title, tags: u.date + " " + u.who, text: u.who + " " + u.st + " " + u.date, go: () => (u.reg ? openReg(u.reg) : jump("#latest")) }));
     I.intel.forEach((x, i) => add({ scope: "intel", kind: x.cat, title: x.title, tags: x.date, text: x.summary + " " + x.action, go: () => jump("#intel-" + i) }));
     add({ scope: "issue", kind: "本期宣導", title: F.title, tags: "弱點 修補 期限 KEV 3天 14天 60天", text: [F.why, F.basis, F.definition].concat(F.scope, F.indicators.map((x) => x.name + x.q + x.tip), F.rules.map((r) => r.h + r.t)).join(" "), go: () => jump("#feature") });
     F.mitigations.forEach((m) => add({ scope: "issue", kind: "補償性控制", title: m.name, text: m.text, go: () => jump("#feature .mit") }));
@@ -444,6 +478,7 @@
   function setupBuddy() {
     const tips = {
       top: ["wink", "嗨!我是阿拉雷,點我可以直接搜尋智庫喔!"],
+      latest: ["surprised", "公務機關看法規異動,企業看資安情資,都在這!"],
       feature: ["explain", "試試看試算器:把四個答案切一切,期限會跟著變!"],
       game: ["cheer", "弱點急診室開張!看你能拿幾分~"],
       policy: ["think", "考考你:資安政策的四個原則是哪四個?"],
