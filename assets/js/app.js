@@ -71,6 +71,14 @@
     setupBuddy();
     bgCanvas();
     reveal();
+    // 風格預覽切換列:網址帶 ?theme= 時才出現
+    const th = new URLSearchParams(location.search).get("theme");
+    if (th) {
+      const T = [["dark", "深色(現行)"], ["light", "A 晨光白"], ["paper", "B 公文米"], ["mint", "C 薄荷糖"], ["gov", "D 藍白官方"]];
+      const bar = document.createElement("div"); bar.className = "theme-bar";
+      bar.innerHTML = "<b>🎨 風格預覽</b>" + T.map(([k, n]) => `<a class="${k === th ? "on" : ""}" href="?theme=${k}">${n}</a>`).join("");
+      document.body.appendChild(bar);
+    }
     if (location.hash.length > 1) setTimeout(() => { const t = document.getElementById(location.hash.slice(1)); if (t) t.scrollIntoView(); }, 150);
   }
 
@@ -529,16 +537,17 @@
   /* ───────── 背景粒子網路 ───────── */
   function bgCanvas() {
     const c = $("#bg"), x = c.getContext("2d"); let W, H, P = [], raf;
+    const pc = (getComputedStyle(document.documentElement).getPropertyValue("--ptc") || "94,234,212").trim();
     const size = () => { W = c.width = innerWidth; H = c.height = innerHeight; const n = Math.min(70, Math.floor((W * H) / 26000)); P = Array.from({ length: n }, () => ({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - 0.5) * 0.25, vy: (Math.random() - 0.5) * 0.25 })); };
     const draw = () => {
       x.clearRect(0, 0, W, H);
       for (let i = 0; i < P.length; i++) {
         const p = P[i]; p.x += p.vx; p.y += p.vy;
         if (p.x < 0 || p.x > W) p.vx *= -1; if (p.y < 0 || p.y > H) p.vy *= -1;
-        x.fillStyle = "rgba(94,234,212,.55)"; x.beginPath(); x.arc(p.x, p.y, 1.4, 0, 6.3); x.fill();
+        x.fillStyle = `rgba(${pc},.55)`; x.beginPath(); x.arc(p.x, p.y, 1.4, 0, 6.3); x.fill();
         for (let j = i + 1; j < P.length; j++) {
           const q = P[j], d = Math.hypot(p.x - q.x, p.y - q.y);
-          if (d < 130) { x.strokeStyle = `rgba(94,234,212,${0.13 * (1 - d / 130)})`; x.beginPath(); x.moveTo(p.x, p.y); x.lineTo(q.x, q.y); x.stroke(); }
+          if (d < 130) { x.strokeStyle = `rgba(${pc},${0.13 * (1 - d / 130)})`; x.beginPath(); x.moveTo(p.x, p.y); x.lineTo(q.x, q.y); x.stroke(); }
         }
       }
       if (!reduce) raf = requestAnimationFrame(draw);
