@@ -51,6 +51,10 @@
     }
     $("#headline").textContent = I.headline;
     $("#heroSub").textContent = I.sub;
+    // 本期焦點:標題整塊可點,下方按鈕直達解說/互動/遊戲/原文(可由期別檔的 focusLinks 覆寫)
+    const fl = I.focusLinks || [{ t: "看完整解說", href: "#feature", main: true }, { t: "🎮 玩本期小遊戲", href: "#game" }];
+    $("#focusLink").href = fl[0].href;
+    $("#focusLinks").innerHTML = fl.map((l) => `<a class="${l.main ? "btn" : "btn ghost"}" href="${esc(l.href)}" ${/^https?:/.test(l.href) ? 'target="_blank" rel="noopener"' : ""}>${esc(l.t)}${l.main ? " →" : ""}</a>`).join("");
     $("#footIssue").textContent = I.label + " · 發行日 " + I.published;
     document.title = `Allan's ISMS智庫｜${I.label}`;
     renderHero(I);

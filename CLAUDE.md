@@ -27,7 +27,8 @@
    - 弱點:直接比對 CISA KEV 官方清單,不可編造 CVE 編號。
    - 每則情資附來源連結;只有媒體摘要、沒讀到原文者標 `v: "partial"`(畫面顯示「待覆核」)。
    - 第二手資料與官方原文衝突時,以官方原文為準並在回報中說明。
-3. **新增期別檔**:複製上一期 `data/issues/YYYY-MM.js` → 改 `id / label / published / headline / sub / og / dialogue / lawUpdates / lawWatch / feature / game / intel / trends / changelog`。
+3. **新增期別檔**:複製上一期 `data/issues/YYYY-MM.js` → 改 `id / label / published / headline / sub / focusLinks / og / dialogue / lawUpdates / lawWatch / feature / game / intel / trends / changelog`。
+   - **本期焦點**:首頁大標(`headline` + `sub`)整塊連到 `focusLinks` 的第一筆;`focusLinks` 是標題下方的直達按鈕(完整解說、互動元件、小遊戲、官方原文),每期依主題調整。
    - **首頁「最新動態」**:左欄 `lawUpdates`(近期法令法規異動,政府機關最關心;每筆要有日期、狀態、適用對象、官方連結,並以 `reg` 對應法規庫)與 `lawWatch`(尚未生效但要先準備的);右欄自動取 `intel` 中非「法規政策/標準動態」者(民間企業最關心)。每月把新異動加在最前面,超過約一年的舊項目移除。
    - `feature` 的結構可依主題調整;若與弱點指引版型差異大,在 `app.js` 的 `renderFeature` 依 `feature.kind` 分支處理。
 4. **新小遊戲**(每期必須不同):在 `assets/js/games/` 新增模組 `TT.games["<type>"] = { mount(root, cfg, TT) }`,並在 `index.html` 加一行 `<script>`。

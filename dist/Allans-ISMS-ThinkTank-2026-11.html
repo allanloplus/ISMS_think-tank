@@ -73,10 +73,15 @@ kbd{font:12px var(--fn);border:1px solid var(--line);border-radius:5px;padding:0
 .org-chip{font-size:13px;color:var(--mut);margin:-8px 0 16px 6px}
 @keyframes pulse{70%{box-shadow:0 0 0 9px transparent}}
 h1{font-size:clamp(32px,4.5vw,56px);font-weight:900;letter-spacing:-.01em}
-.h1-site{display:block;font-family:var(--fn);font-size:.42em;font-weight:700;letter-spacing:.04em;color:var(--mut);margin-bottom:10px}
+.h1-site{font:700 clamp(15px,1.9vw,23px) var(--fn);letter-spacing:.04em;color:var(--mut);margin-bottom:10px}
+.focus{display:block;text-decoration:none;color:inherit;margin:0 -18px;padding:14px 18px 6px;border-radius:20px;border:1px solid transparent;transition:.25s;position:relative}
+.focus:hover{background:rgba(255,255,255,.05);border-color:var(--line)} .focus:hover .focus-tag{background:var(--yel);color:#1a1300}
+.focus-tag{display:inline-block;font-size:13.5px;font-weight:700;padding:3px 14px;border-radius:99px;border:1px solid var(--yel);color:var(--yel);margin-bottom:10px;transition:.2s}
+.focus h1{margin-bottom:.35em}
+.focus-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px} .focus-links .btn{padding:9px 18px;font-size:14.5px}
 .h1-head{display:block;white-space:pre-line;background:linear-gradient(100deg,#fff 20%,var(--teal) 60%,var(--yel));-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero-sub{font-size:clamp(15px,1.5vw,18px);color:var(--mut);max-width:620px}
-.searchbar{display:flex;align-items:center;gap:10px;margin:26px 0 12px;padding:8px 8px 8px 18px;border-radius:99px;background:rgba(255,255,255,.07);border:1px solid var(--line);max-width:620px;transition:.2s;color:var(--mut)}
+.searchbar{display:flex;align-items:center;gap:10px;margin:22px 0 12px;padding:8px 8px 8px 18px;border-radius:99px;background:rgba(255,255,255,.07);border:1px solid var(--line);max-width:620px;transition:.2s;color:var(--mut)}
 .searchbar:focus-within{border-color:var(--teal);box-shadow:0 0 0 4px rgba(94,234,212,.15)}
 .searchbar input{flex:1;min-width:0;background:none;border:0;outline:0;color:#fff;font:inherit;font-size:16px}
 .searchbar input::placeholder{color:#7f93bd}
@@ -335,6 +340,7 @@ h1{font-size:clamp(32px,4.5vw,56px);font-weight:900;letter-spacing:-.01em}
 }
 @media(max-width:640px){
   html{scroll-padding-top:66px} body{font-size:15.5px}
+  .focus{margin:0 -10px;padding:10px 10px 2px} .focus h1{font-size:clamp(26px,7.7vw,30px)} .focus-links{gap:8px;margin-top:10px} .focus-links .btn{padding:8px 13px;font-size:13.5px}
   .hero-cta{gap:8px;margin-top:18px} .hero-cta a{flex:1 1 0;padding:10px;gap:8px;min-width:0} .hero-cta i{font-size:22px} .hero-cta b{font-size:14px} .hero-cta small{font-size:11px} .stats{margin-top:22px}
   /* 最新動態:手機用頁籤切換兩欄,一次只看一邊 */
   .lt-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;border-radius:16px;background:rgba(0,0,0,.35);margin-bottom:12px;position:sticky;top:62px;z-index:6}
@@ -405,8 +411,13 @@ h1{font-size:clamp(32px,4.5vw,56px);font-weight:900;letter-spacing:-.01em}
     <div class="hero-text">
       <a class="issue-chip" href="#about" title="查看歷期智庫"><span class="dot"></span><span id="issueLabel"></span><span class="more">歷期 ▾</span></a>
       <div class="org-chip" id="orgName"></div>
-      <h1><span class="h1-site">Allan's ISMS智庫</span><span class="h1-head" id="headline"></span></h1>
-      <p class="hero-sub" id="heroSub"></p>
+      <div class="h1-site">Allan's ISMS智庫</div>
+      <a class="focus" href="#feature" id="focusLink" title="看本期焦點完整解說">
+        <span class="focus-tag">📌 本期焦點</span>
+        <h1><span class="h1-head" id="headline"></span></h1>
+        <p class="hero-sub" id="heroSub"></p>
+      </a>
+      <div class="focus-links" id="focusLinks"></div>
       <form class="searchbar" id="heroSearch" role="search">
         <svg viewBox="0 0 24 24" width="22" height="22"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         <input id="heroQ" type="search" placeholder="搜尋內部 ISMS 文件、法規、情資…例如「弱點」「通報」「個資」" autocomplete="off">
@@ -1260,6 +1271,14 @@ TT.issue = {
   /* 分享縮圖文字(tools/make_og.js 讀取);nums: [數字, 單位, 顏色] */
   og: { kicker: "公務機關必讀", title: "弱點修補進入<br><em>3·14·60</em> 倒數時代", nums: [["3", "天", "#fb7185"], ["14", "天", "#fb923c"], ["60", "天", "#facc15"]], foot: "資安署新指引一次看懂 × 期限試算器 × <b>🎮 小遊戲:弱點急診室</b>" },
 
+  /* 本期焦點下方的直達按鈕(第一顆同時是標題的連結目標);href 可為頁內錨點或外部網址 */
+  focusLinks: [
+    { t: "看完整解說", href: "#feature", main: true },
+    { t: "🧮 試算處置期限", href: "#eval" },
+    { t: "🎮 玩小遊戲", href: "#game" },
+    { t: "資安署原文 ↗", href: "https://moda.gov.tw/ACS/operations/aisec/21256" }
+  ],
+
   /* 首頁 Allan × 阿拉雷 開場對話(who: allan|arale, face: 表情檔名) */
   dialogue: [
     { who: "arale", face: "surprised", text: "Allan 顧問!資安署 11/6 出了新指引,弱點最快要在 3 天內處理完?!" },
@@ -1507,6 +1526,10 @@ TT.issue = {
     }
     $("#headline").textContent = I.headline;
     $("#heroSub").textContent = I.sub;
+    // 本期焦點:標題整塊可點,下方按鈕直達解說/互動/遊戲/原文(可由期別檔的 focusLinks 覆寫)
+    const fl = I.focusLinks || [{ t: "看完整解說", href: "#feature", main: true }, { t: "🎮 玩本期小遊戲", href: "#game" }];
+    $("#focusLink").href = fl[0].href;
+    $("#focusLinks").innerHTML = fl.map((l) => `<a class="${l.main ? "btn" : "btn ghost"}" href="${esc(l.href)}" ${/^https?:/.test(l.href) ? 'target="_blank" rel="noopener"' : ""}>${esc(l.t)}${l.main ? " →" : ""}</a>`).join("");
     $("#footIssue").textContent = I.label + " · 發行日 " + I.published;
     document.title = `Allan's ISMS智庫｜${I.label}`;
     renderHero(I);
