@@ -11,6 +11,14 @@ TT.issue = {
   /* 分享縮圖文字(tools/make_og.js 讀取);nums: [數字, 單位, 顏色] */
   og: { kicker: "公務機關必讀", title: "弱點修補進入<br><em>3·14·60</em> 倒數時代", nums: [["3", "天", "#fb7185"], ["14", "天", "#fb923c"], ["60", "天", "#facc15"]], foot: "資安署新指引一次看懂 × 期限試算器 × <b>🎮 小遊戲:弱點急診室</b>" },
 
+  /* 本期焦點下方的直達按鈕(第一顆同時是標題的連結目標);href 可為頁內錨點或外部網址 */
+  focusLinks: [
+    { t: "看完整解說", href: "#feature", main: true },
+    { t: "🧮 試算處置期限", href: "#eval" },
+    { t: "🎮 玩小遊戲", href: "#game" },
+    { t: "資安署原文 ↗", href: "https://moda.gov.tw/ACS/operations/aisec/21256" }
+  ],
+
   /* 首頁 Allan × 阿拉雷 開場對話(who: allan|arale, face: 表情檔名) */
   dialogue: [
     { who: "arale", face: "surprised", text: "Allan 顧問!資安署 11/6 出了新指引,弱點最快要在 3 天內處理完?!" },
