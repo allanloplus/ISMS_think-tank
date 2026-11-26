@@ -3,7 +3,7 @@
  *
  * 做什麼:
  *  1. 接收智庫網站 subscribe.html 的「申請訂閱」→ 寫入名單,狀態為「待審」,並寄信通知 Allan
- *  2. Allan 在試算表把狀態改成「核准」→ 自動補上日期與取消碼,並寄歡迎信
+ *  2. Allan 在試算表把狀態改成「核准」→ 自動補上日期與取消碼;來源為「線上申請」者另寄開通信(自行輸入的不寄)
  *  3. 選單「ISMS智庫 → 發送本期」→ 抓智庫最新一期的信件內容,寄給所有「核准」的人(每期每人只寄一次)
  *  4. 收件人按信尾「取消訂閱」→ 狀態改成「取消」,之後不再寄送
  *  5. 選單「主動發送」→ 在「主動發送」工作表寫主旨與內文,隨時寄給全部或指定的核准訂閱者
@@ -56,7 +56,7 @@ function setup() {
   // 可安裝的編輯觸發器:改狀態時才能自動寄歡迎信(一般的 onEdit 沒有寄信權限)
   ScriptApp.getProjectTriggers().filter((t) => t.getHandlerFunction() === "onStatusEdit").forEach((t) => ScriptApp.deleteTrigger(t));
   ScriptApp.newTrigger("onStatusEdit").forSpreadsheet(ss).onEdit().create();
-  SpreadsheetApp.getUi().alert("初始化完成 ✅\n\n接下來:\n1. 部署 → 新增部署作業 → 網頁應用程式(執行身分:我;存取權:所有人)\n2. 把部署後的網址交給 Claude 填進智庫網站\n\n之後要手動加人:直接在名單新增一列,填 Email 並把狀態選成「核准」即可。");
+  SpreadsheetApp.getUi().alert("初始化完成 ✅\n\n接下來:\n1. 部署 → 新增部署作業 → 網頁應用程式(執行身分:我;存取權:所有人)\n2. 把部署後的網址交給 Claude 填進智庫網站\n\n之後要手動加人:直接在名單新增一列,填 Email 並把狀態選成「核准」即可(自行輸入的不會寄開通信)。");
 }
 
 /* ───────── 試算表:改狀態時自動處理 ───────── */
@@ -67,9 +67,10 @@ function onStatusEdit(e) {
   const email = String(sh.getRange(r, C.email).getValue()).trim().toLowerCase();
   if (!sh.getRange(r, C.token).getValue()) sh.getRange(r, C.token).setValue(newToken_());
   if (!sh.getRange(r, C.source).getValue()) sh.getRange(r, C.source).setValue("手動建立");
+  const online = String(sh.getRange(r, C.source).getValue()).trim() === "線上申請";   // 只有讀者自己線上申請的,核准時才寄開通信;Allan 自行輸入的不寄
   if (v === ST.OK && old !== ST.OK) {
     sh.getRange(r, C.approved).setValue(now); sh.getRange(r, C.cancelled).clearContent();
-    if (isEmail_(email)) {
+    if (online && isEmail_(email)) {
       const name = sh.getRange(r, C.name).getValue(), token = sh.getRange(r, C.token).getValue();
       send_(email, "【Allan's ISMS智庫】訂閱已開通",
         (name ? name + " " : "") + "您好,\n\n您的「Allan's ISMS智庫」每月電子報訂閱已開通。\n之後每月新一期發行時,會寄一封本期摘要給您,內容以文字為主,點連結即可進入智庫閱讀。\n\n現在就可以進入智庫:\n" + CFG.HOME +
