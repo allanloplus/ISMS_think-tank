@@ -517,6 +517,8 @@ h1{font-size:clamp(32px,4.5vw,56px);font-weight:900;letter-spacing:-.01em}
 window.TT = window.TT || {};
 TT.manifest = {
   site: "Allan's ISMS智庫",
+  url: "https://allanloplus.github.io/ISMS_think-tank/",
+  contact: { title: "ISMS智庫顧問", name: "Allan Lo", email: "isms@123hi.org", web: "https://www.123hi.org" },
   current: "2026-11",
   issues: [
     { id: "2026-11", label: "2026 年 11 月號", topic: "弱點處置期限評估指引", game: "弱點急診室", gameIcon: "🚑" }
@@ -1580,7 +1582,7 @@ TT.issue = {
     setupBuddy();
     bgCanvas();
     reveal();
-    if (location.hash.length > 1) setTimeout(() => { const t = document.getElementById(location.hash.slice(1)); if (t) t.scrollIntoView(); }, 150);
+    if (location.hash.length > 1) setTimeout(() => { if (document.getElementById(location.hash.slice(1))) jump(location.hash); }, 150); // 訂閱信的連結會直接帶錨點進來,被收合的情資要自動展開
   }
 
   /* ───────── HERO ───────── */

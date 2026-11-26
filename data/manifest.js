@@ -3,6 +3,8 @@
 window.TT = window.TT || {};
 TT.manifest = {
   site: "Allan's ISMS智庫",
+  url: "https://allanloplus.github.io/ISMS_think-tank/",
+  contact: { title: "ISMS智庫顧問", name: "Allan Lo", email: "isms@123hi.org", web: "https://www.123hi.org" },
   current: "2026-11",
   issues: [
     { id: "2026-11", label: "2026 年 11 月號", topic: "弱點處置期限評估指引", game: "弱點急診室", gameIcon: "🚑" }

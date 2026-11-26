@@ -71,7 +71,7 @@
     setupBuddy();
     bgCanvas();
     reveal();
-    if (location.hash.length > 1) setTimeout(() => { const t = document.getElementById(location.hash.slice(1)); if (t) t.scrollIntoView(); }, 150);
+    if (location.hash.length > 1) setTimeout(() => { if (document.getElementById(location.hash.slice(1))) jump(location.hash); }, 150); // 訂閱信的連結會直接帶錨點進來,被收合的情資要自動展開
   }
 
   /* ───────── HERO ───────── */

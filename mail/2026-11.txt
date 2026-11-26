@@ -1,0 +1,43 @@
+主旨:【Allan's ISMS智庫】2026 年 11 月號:弱點修補進入「3·14·60」倒數時代
+寄件人:ISMS智庫顧問 Allan Lo <isms@123hi.org>
+──────────────────────────────
+您好,
+
+Allan's ISMS智庫 2026 年 11 月號已發行,以下是本期摘要。
+
+■ 本期焦點
+弱點修補進入「3·14·60」倒數時代
+數發部資安署 115/11/6 訂定《各機關基於風險導向之弱點處置期限評估指引》——AI 讓攻擊變快,修補期限也跟著變明確。
+→ 完整解說:https://allanloplus.github.io/ISMS_think-tank/?issue=2026-11#feature
+
+■ 近期法令法規異動(政府機關必看)
+・11/11[已發布]數發部「五大防護行動」:重大警訊 72 小時內修補、通報並通知當事人(電商/數位服務)
+・11/06[已發布]各機關基於風險導向之弱點處置期限評估指引(3/14/60 天)(公務機關/特定非公務機關)
+・11/06[已發布]經濟部所管特定非公務機關資通安全管理作業辦法修正發布(能源/水資源/科學園區)
+・10/13[預告中]金管會「金融業運用代理 AI 安全諮詢文件」徵詢意見(金融業)
+・09/11[已生效]EU Cyber Resilience Act 弱點與事件通報義務開始適用(輸歐數位產品)
+→ 全部 11 則與官方來源:https://allanloplus.github.io/ISMS_think-tank/?issue=2026-11#latest
+
+■ 近期重要資安情資(民間企業必看)
+・11/11[AI資安]AI 代理網攻波及國內十餘家企業與平台,數發部提出「72 小時」應變要求
+・11/09[國內事件]外交部領事事務局部分網站遭入侵,護照照片檔與授權書掃描檔外洩
+・11/20[重大弱點-KEV]11 月 KEV:SonicWall SSLVPN、Barracuda、Check Point、VMware vCenter、Cisco Expressway
+・11/18[重大弱點-KEV]AI 基礎設施元件開始進入 KEV:GPUStack、LiteLLM、MONAI Label
+・11/18[國內事件]上市櫃資安重訊頻傳:10~11 月多家電商、ERP 與製造業者發布事件
+→ 全部情資與建議行動:https://allanloplus.github.io/ISMS_think-tank/?issue=2026-11#intel
+
+■ 本期小遊戲:弱點急診室
+你是今晚的值班資安官,8 個弱點送進急診——請在時限內判定處置期限!
+→ 玩一局(約 2 分鐘):https://allanloplus.github.io/ISMS_think-tank/?issue=2026-11#game
+
+■ 進入智庫
+https://allanloplus.github.io/ISMS_think-tank/
+(內部 ISMS 文件、外部法規庫、情資皆可搜尋)
+
+--
+ISMS智庫顧問 Allan Lo
+isms@123hi.org
+https://www.123hi.org
+
+您會收到這封信,是因為您是 Allan Lo 顧問的客戶,或曾申請訂閱並經同意。
+本信每月隨新一期發行寄送一次。取消訂閱:{{UNSUBSCRIBE}}

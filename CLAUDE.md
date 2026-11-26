@@ -43,7 +43,9 @@
    ```bash
    node tools/make_og.js          # 分享縮圖
    python3 tools/build_single.py  # 單檔版 → dist/
+   node tools/make_mail.js        # 訂閱信(純文字 + 極簡 HTML,無圖片)→ mail/
    ```
+   訂閱信內容全部取自期別檔,連結一律帶 `?issue=YYYY-MM`;聯絡資訊在 `manifest.js` 的 `contact`。訂閱名單與寄送不在本 repo(名單屬個資,不可提交進來)。
 10. **測試**:本機 `python3 -m http.server` 用瀏覽器實測——試算/互動元件、遊戲整局、搜尋、手機寬度 390px 無橫向捲動、console 無錯誤。看過截圖再交付。
 11. commit、push;回報本期內容摘要與「待覆核」清單。
 
