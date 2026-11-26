@@ -19,6 +19,9 @@ html = re.sub(r'<script src="([^"]+)"></script>', inline, html)
 # 靜態圖片
 html = re.sub(r'(src|href)="assets/img/chars/([\w-]+)\.webp"', lambda m: f'{m.group(1)}="{chars[m.group(2)]}"', html)
 html = html.replace('href="assets/img/favicon.png"', f'href="{b64(root / "assets/img/favicon.png", "image/png")}"')
+# 單檔版沒有訂閱頁,連回線上版
+site = re.search(r'url:\s*"([^"]+)"', (root / "data/manifest.js").read_text("utf8")).group(1)
+html = html.replace('href="subscribe.html"', f'href="{site}subscribe.html"')
 out = root / "dist" / f"Allans-ISMS-ThinkTank-{cur}.html"
 out.parent.mkdir(exist_ok=True); out.write_text(html, "utf8")
 left = re.findall(r'(?:src|href)="(assets/[^"]+|data/[^"]+)"', html)
