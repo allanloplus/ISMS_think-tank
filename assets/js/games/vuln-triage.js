@@ -61,7 +61,7 @@
         const R = pct >= 0.85 ? ["首席資安官", "laugh", "判斷又快又準!可以直接來當我的稽核夥伴了。"]
           : pct >= 0.6 ? ["值班資安官", "smile", "觀念正確!再熟悉一下表一,3 天的類型別漏掉。"]
           : ["實習資安員", "think", "別灰心,回上面用試算器多練幾次,口訣是:曝露、已被利用、可自動化、完全控制。"];
-        const share = `我在「Allan's ISMS智庫」${TT.issue.label}小遊戲〈${cfg.title}〉拿到 ${score} 分(${right}/${deck.length}),稱號:${R[0]}!你也來挑戰 → ${location.origin + location.pathname}#game`;
+        const share = `我在「Allan's ISMS智庫」${TT.issue.label}小遊戲〈${cfg.title}〉拿到 ${score} 分(${right}/${deck.length}),稱號:${R[0]}!你也來挑戰 → ${TT.manifest.home || location.origin + location.pathname}`;
         root.innerHTML = `<div class="g-end"><img class="g-char" src="${face("allan", R[1])}" alt="">
           <div><div class="g-rank">${R[0]}</div><div class="g-final"><b>${score}</b> 分 · 答對 ${right} / ${deck.length}${score > prev && prev ? " · 🎉 刷新紀錄" : ""}</div>
           <p class="g-say"><b>Allan 顧問:</b>${R[2]}</p>

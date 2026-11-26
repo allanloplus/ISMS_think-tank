@@ -7,6 +7,7 @@ const ctx = {}; ctx.window = ctx; vm.createContext(ctx);
 const load = (f) => vm.runInContext(fs.readFileSync(path.join(root, f), "utf8"), ctx);
 load("data/manifest.js"); load(`data/issues/${ctx.TT.manifest.current}.js`);
 const M = ctx.TT.manifest, I = ctx.TT.issue;
+const HOME = M.home || M.url;
 const C = M.contact, base = M.url.replace(/\/$/, "/") + "?issue=" + I.id;
 const md = (d) => d.slice(5).replace("-", "/");
 const N = 5;
@@ -28,7 +29,7 @@ L.push(`■ 近期重要資安情資(民間企業必看)`);
 news.forEach(({ x }) => L.push(`・${md(x.date)}[${x.cat}]${x.title}`));
 L.push(`→ 全部情資與建議行動:${base}#intel`, ``);
 L.push(`■ 本期小遊戲:${I.game.title}`, I.game.tagline, `→ 玩一局(約 2 分鐘):${base}#game`, ``);
-L.push(`■ 進入智庫`, `${M.url}`, `(內部 ISMS 文件、外部法規庫、情資皆可搜尋)`, ``);
+L.push(`■ 進入智庫`, `${HOME}`, `(內部 ISMS 文件、外部法規庫、情資皆可搜尋)`, ``);
 L.push(`--`, `${C.title} ${C.name}`, C.email, C.web, ``);
 L.push(`您會收到這封信,是因為您是 ${C.name} 顧問的客戶,或曾申請訂閱並經同意。`, `本信每月隨新一期發行寄送一次。取消訂閱:{{UNSUBSCRIBE}}`);
 const text = L.join("\n") + "\n";
@@ -91,7 +92,7 @@ ${card("🏢", "近期重要資安情資", "民間企業必看", K.teal, K.tealB
 
 <tr><td align="center" style="padding:22px 24px 6px">
  <div style="${F}font-size:14px;color:${K.mut};margin-bottom:10px">智庫內容都可以搜尋,想找什麼直接進來查 👇</div>
- ${btn(M.url, "🔎 進入智庫", K.teal)}${btn(M.url + "#external", "📚 外部法規庫", "#e8eef9", K.navy)}${btn(M.url + "#internal", "📁 內部 ISMS", "#e8eef9", K.navy)}
+ ${btn(HOME, "🔎 進入智庫", K.teal)}${btn(M.url + "#external", "📚 外部法規庫", "#e8eef9", K.navy)}${btn(M.url + "#internal", "📁 內部 ISMS", "#e8eef9", K.navy)}
 </td></tr>
 
 <tr><td style="padding:18px 24px 0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f6f8fc;border-radius:14px"><tr>

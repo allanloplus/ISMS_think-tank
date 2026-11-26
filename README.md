@@ -2,7 +2,8 @@
 
 給客戶同仁的每月 ISMS 知識站:內部 ISMS 文件 × 外部法令法規 × 資安情資,由 Allan 顧問與 AI 助理阿拉雷帶路,每期附一個小遊戲。
 
-- **線上版**:啟用 GitHub Pages 後為 `https://allanloplus.github.io/ISMS_think-tank/`
+- **對外入口**:<https://www.123hi.org/isms%E6%99%BA%E5%BA%AB>(Google Sites 頁面,內嵌本站)
+- **本站實際位址**:`https://allanloplus.github.io/ISMS_think-tank/`(深層連結與訂閱頁走這裡)
 - **單檔版**:`dist/Allans-ISMS-ThinkTank-<期別>.html`(可離線開啟、可直接傳檔)
 - **本機預覽**:`python3 -m http.server` 後開 `http://localhost:8000`
 

@@ -520,6 +520,8 @@ h1{font-size:clamp(32px,4.5vw,56px);font-weight:900;letter-spacing:-.01em}
 window.TT = window.TT || {};
 TT.manifest = {
   site: "Allan's ISMS智庫",
+  /* home:對外公布的入口(Google Sites 頁面,內嵌本站);url:本站實際位址,深層連結(?issue=、#錨點)、訂閱頁與 mail/latest.json 只能走這裡 */
+  home: "https://www.123hi.org/isms%E6%99%BA%E5%BA%AB",
   url: "https://allanloplus.github.io/ISMS_think-tank/",
   /* 訂閱 API:Google Apps Script 網頁應用程式網址(設定方式見 subscription/README.md);留空時訂閱頁會請讀者改用來信申請 */
   subscribeApi: "https://script.google.com/macros/s/AKfycbyfpOY80A2Epvc5c_CoS0IqkNc3VDoKo1cm8jMhI98DgN518YTal0PQzCJ75ipFC2M0IQ/exec",
@@ -1275,7 +1277,7 @@ TT.regs = [
         const R = pct >= 0.85 ? ["首席資安官", "laugh", "判斷又快又準!可以直接來當我的稽核夥伴了。"]
           : pct >= 0.6 ? ["值班資安官", "smile", "觀念正確!再熟悉一下表一,3 天的類型別漏掉。"]
           : ["實習資安員", "think", "別灰心,回上面用試算器多練幾次,口訣是:曝露、已被利用、可自動化、完全控制。"];
-        const share = `我在「Allan's ISMS智庫」${TT.issue.label}小遊戲〈${cfg.title}〉拿到 ${score} 分(${right}/${deck.length}),稱號:${R[0]}!你也來挑戰 → ${location.origin + location.pathname}#game`;
+        const share = `我在「Allan's ISMS智庫」${TT.issue.label}小遊戲〈${cfg.title}〉拿到 ${score} 分(${right}/${deck.length}),稱號:${R[0]}!你也來挑戰 → ${TT.manifest.home || location.origin + location.pathname}`;
         root.innerHTML = `<div class="g-end"><img class="g-char" src="${face("allan", R[1])}" alt="">
           <div><div class="g-rank">${R[0]}</div><div class="g-final"><b>${score}</b> 分 · 答對 ${right} / ${deck.length}${score > prev && prev ? " · 🎉 刷新紀錄" : ""}</div>
           <p class="g-say"><b>Allan 顧問:</b>${R[2]}</p>
