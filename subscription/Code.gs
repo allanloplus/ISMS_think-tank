@@ -52,6 +52,8 @@ function setup() {
     SpreadsheetApp.newDataValidation().requireValueInList([ST.PENDING, ST.OK, ST.CANCEL, ST.REJECT], true).setAllowInvalid(false).build());
   [220, 110, 170, 70, 90, 140, 140, 140, 120, 110, 200].forEach((w, i) => sh.setColumnWidth(i + 1, w));
   sh.hideColumns(C.token);
+  sh.getRange(2, C.last, sh.getMaxRows() - 1, 1).setNumberFormat("@");   // 期別欄固定為純文字
+  sh.getRange(2, C.token, sh.getMaxRows() - 1, 1).setNumberFormat("@");
   let lg = ss.getSheetByName(CFG.LOG) || ss.insertSheet(CFG.LOG);
   if (lg.getLastRow() === 0) lg.getRange(1, 1, 1, 6).setValues([["時間", "動作", "期別", "成功", "失敗", "說明"]]).setFontWeight("bold");
   // 可安裝的編輯觸發器:改狀態時才能自動寄歡迎信(一般的 onEdit 沒有寄信權限)
@@ -182,7 +184,7 @@ function sendIssue_(only) {
   const rows = sh.getLastRow() < 2 ? [] : sh.getRange(2, 1, sh.getLastRow() - 1, HEAD.length).getValues();
   const todo = [], skipped = []; let again = 0;
   rows.forEach((v, i) => {
-    const row = i + 2, email = String(v[C.email - 1]).trim().toLowerCase(), had = String(v[C.last - 1]) === m.issue;
+    const row = i + 2, email = String(v[C.email - 1]).trim().toLowerCase(), had = issueOf_(v[C.last - 1]) === m.issue;
     if (only && !only[row]) return;
     if (v[C.status - 1] !== ST.OK || !isEmail_(email)) { if (only && email) skipped.push(email + "(" + (v[C.status - 1] || "未設定狀態") + ")"); return; }
     if (!only && had) return;
@@ -202,7 +204,7 @@ function sendIssue_(only) {
     try {
       let token = t.token; if (!token) { token = newToken_(); sh.getRange(t.row, C.token).setValue(token); }
       sendIssueMail_(t.email, m.subject, m, unsubUrl_(token));
-      sh.getRange(t.row, C.last).setValue(m.issue); ok++;
+      sh.getRange(t.row, C.last).setNumberFormat("@").setValue(m.issue); ok++;   // 先設成純文字再寫,避免被試算表轉成日期
     } catch (err) { fail.push(t.email + ":" + err.message); }
   });
   SpreadsheetApp.getActive().getSheetByName(CFG.LOG).appendRow([new Date(), only ? "發送本期(選取的列)" : "發送本期", m.issue, ok, fail.length, fail.join(";")]);
@@ -347,7 +349,12 @@ function findRow_(sh, col, value) {
 function isEmail_(s) { return /^[^\s@<>"',;]+@[^\s@<>"',;]+\.[a-z]{2,}$/i.test(s) && s.length <= 120; }
 function clean_(s, max) { return String(s || "").replace(/[\u0000-\u001f<>]/g, "").trim().slice(0, max); }
 function safe_(s) { return /^[=+\-@]/.test(s) ? "'" + s : s; }               // 防止有人在表單欄位塞試算表公式
-function newToken_() { return (Utilities.getUuid() + Utilities.getUuid()).replace(/-/g, "").slice(0, 40); }
+function newToken_() { return "a" + (Utilities.getUuid() + Utilities.getUuid()).replace(/-/g, "").slice(0, 39); }   // 字母開頭,不會被試算表當成數字
+/* 讀「最近寄送期別」:試算表會把 2026-11 這種文字自動轉成日期,所以日期也要還原成 yyyy-MM 再比對 */
+function issueOf_(v) {
+  if (v instanceof Date) return Utilities.formatDate(v, SpreadsheetApp.getActive().getSpreadsheetTimeZone(), "yyyy-MM");
+  return String(v == null ? "" : v).trim();
+}
 function unsubUrl_(token) { return CFG.SITE + "subscribe.html?u=" + token; }
 function json_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
 function send_(to, subject, body) { MailApp.sendEmail(to, subject, body, { name: CFG.SENDER_NAME, replyTo: CFG.CONTACT }); }
