@@ -21,6 +21,7 @@
 .fld{display:block;margin:14px 0 0} .fld span{display:block;font-size:14px;font-weight:500;margin-bottom:5px}
 .fld input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg2);color:var(--tx);font:inherit;font-size:16px;outline:0}
 .fld input:focus{border-color:var(--teal);box-shadow:0 0 0 4px rgba(var(--tc),.15)}
+.limit{margin:10px 0 0;padding:14px 18px;border-radius:12px;border:2px solid var(--d14);border-left-width:8px;background:rgba(251,146,60,.12);color:var(--hi);font-size:16px;font-weight:500;line-height:1.7} .limit b{color:var(--d3);font-weight:900}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 .agree{display:flex;gap:10px;align-items:flex-start;margin:16px 0 4px;font-size:14.5px;line-height:1.6} .agree input{width:18px;height:18px;margin-top:3px;accent-color:var(--teal);flex:none}
 .notice{font-size:13.5px;color:var(--tx2);background:rgba(var(--ovc),.05);border-radius:12px;padding:12px 16px;margin-top:14px} .notice summary{cursor:pointer;font-weight:700} .notice ul{margin:8px 0 0;padding-left:20px} .notice li{margin-bottom:4px}
@@ -54,7 +55,7 @@
 
   <section class="card sub-card" id="applyBox">
     <h2>申請訂閱</h2>
-    <p class="muted">本電子報僅提供 Allan 顧問的客戶,或經顧問同意的對象訂閱。</p>
+    <p class="limit">⚠️ 本電子報僅提供 Allan 顧問的客戶,或經顧問同意的對象訂閱,<b>無法確認申請人身分之電子郵件恕不審核</b>。</p>
     <ol class="steps"><li>填寫下方資料送出</li><li>Allan 顧問確認身分後開通</li><li>收到「訂閱已開通」通知信,之後每月寄送</li></ol>
     <form id="applyForm" novalidate>
       <label class="fld"><span>姓名</span><input name="name" required maxlength="40" autocomplete="name"></label>

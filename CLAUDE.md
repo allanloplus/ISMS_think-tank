@@ -67,6 +67,12 @@ Allan 的優化版程序文件在他本機 `D:\AI_Project\ISMS2027_Allan版\ISMS
 (保留欄位結構:`id, tier, title, ver, date, owner, iso, summary, points, forms, tags`),並把 `org.simulated` 改為 `false`。
 多客戶時:每個客戶一組 `org.js` + `internal-docs.js`,其餘共用。
 
+## 網址
+
+- 對外公布的入口是 `manifest.js` 的 `home`(Allan 的 Google Sites 頁面,用 iframe 內嵌本站)。信件的「進入智庫」、遊戲成績分享文字用這個。
+- 內嵌頁無法帶 `?issue=` 或 `#錨點`,所以信件裡「看完整解說」「某則情資」這類深層連結、訂閱/取消頁、`mail/latest.json` 一律用 `manifest.js` 的 `url`(GitHub Pages)。兩者不可混用。
+- 分享縮圖只在分享 GitHub Pages 網址時出現;分享 123hi.org 網址時顯示的是 Google Sites 自己的預覽,本 repo 管不到。
+
 ## 視覺風格
 
 - 預設為淺色「晨光白」(`<html data-theme="light">`,變數在 `style.css` 末段);原深色版保留在 `:root`,網址加 `?theme=dark` 可看。

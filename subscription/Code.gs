@@ -6,16 +6,19 @@
  *  2. Allan 在試算表把狀態改成「核准」→ 自動補上日期與取消碼,並寄歡迎信
  *  3. 選單「ISMS智庫 → 發送本期」→ 抓智庫最新一期的信件內容,寄給所有「核准」的人(每期每人只寄一次)
  *  4. 收件人按信尾「取消訂閱」→ 狀態改成「取消」,之後不再寄送
+ *  5. 選單「主動發送」→ 在「主動發送」工作表寫主旨與內文,隨時寄給全部或指定的核准訂閱者
  *
  * 安裝步驟見同資料夾的 README.md。請用 isms@123hi.org 這個帳號建立,信才會從這個地址寄出。
  */
 
 const CFG = {
-  SITE: "https://allanloplus.github.io/ISMS_think-tank/",   // 智庫網址(結尾要有 /)
+  SITE: "https://allanloplus.github.io/ISMS_think-tank/",   // 智庫實際位址(結尾要有 /):訂閱頁、取消連結、信件內容檔都在這裡
+  HOME: "https://www.123hi.org/isms%E6%99%BA%E5%BA%AB",        // 對外公布的入口網址
   SENDER_NAME: "ISMS智庫顧問 Allan Lo",
   CONTACT: "isms@123hi.org",                                 // 申請通知寄到這裡;也是信件的回覆地址
   LIST: "訂閱名單",
   LOG: "寄送紀錄",
+  COMPOSE: "主動發送",
   HOURLY_CAP: 60                                             // 每小時最多受理幾筆線上申請,防止被灌爆
 };
 const HEAD = ["Email", "姓名", "單位", "狀態", "來源", "申請時間", "核准時間", "取消時間", "取消碼", "最近寄送期別", "備註"];
@@ -29,6 +32,10 @@ function onOpen() {
     .addSeparator()
     .addItem("預覽本期(只寄給我自己)", "sendPreview")
     .addItem("發送本期給所有「核准」的訂閱者", "sendIssue")
+    .addSeparator()
+    .addItem("主動發送:開啟撰寫表", "openCompose")
+    .addItem("主動發送:預覽(只寄給我自己)", "previewCustom")
+    .addItem("主動發送:寄出", "sendCustom")
     .addSeparator()
     .addItem("名單統計", "showStats")
     .addToUi();
@@ -65,7 +72,7 @@ function onStatusEdit(e) {
     if (isEmail_(email)) {
       const name = sh.getRange(r, C.name).getValue(), token = sh.getRange(r, C.token).getValue();
       send_(email, "【Allan's ISMS智庫】訂閱已開通",
-        (name ? name + " " : "") + "您好,\n\n您的「Allan's ISMS智庫」每月電子報訂閱已開通。\n之後每月新一期發行時,會寄一封本期摘要給您,內容以文字為主,點連結即可進入智庫閱讀。\n\n現在就可以進入智庫:\n" + CFG.SITE +
+        (name ? name + " " : "") + "您好,\n\n您的「Allan's ISMS智庫」每月電子報訂閱已開通。\n之後每月新一期發行時,會寄一封本期摘要給您,內容以文字為主,點連結即可進入智庫閱讀。\n\n現在就可以進入智庫:\n" + CFG.HOME +
         "\n\n--\n" + CFG.SENDER_NAME + "\n" + CFG.CONTACT + "\n\n不想再收到?取消訂閱:" + unsubUrl_(token) + "\n");
     }
   }
@@ -182,6 +189,119 @@ function sendIssue() {
 function sendIssueMail_(to, subject, m, unsub) {
   GmailApp.sendEmail(to, subject, m.text.split("{{UNSUBSCRIBE}}").join(unsub),
     { htmlBody: m.html.split("{{UNSUBSCRIBE}}").join(unsub), name: CFG.SENDER_NAME, replyTo: CFG.CONTACT });
+}
+
+/* ───────── 主動發送:隨時寫一封信寄給訂閱者(重大弱點提醒、活動通知…) ───────── */
+const WHO = { ALL: "全部核准的訂閱者", ORG: "單位名稱包含關鍵字", EMAIL: "指定 Email(需在核准名單內)" };
+const CP = { subject: 2, body: 3, btnText: 4, btnUrl: 5, who: 6, cond: 7, last: 8 };   // 「主動發送」工作表 B 欄的列號
+
+function openCompose() { compose_().activate(); }
+
+function compose_() {
+  const ss = SpreadsheetApp.getActive();
+  let sh = ss.getSheetByName(CFG.COMPOSE);
+  if (sh) return sh;
+  sh = ss.insertSheet(CFG.COMPOSE);
+  sh.getRange(1, 1, 8, 3).setValues([
+    ["主動發送", "在 B 欄填寫 → 選單「主動發送:預覽」確認 → 「主動發送:寄出」", ""],
+    ["主旨", "", "必填。系統會自動在前面加上【Allan's ISMS智庫】"],
+    ["內文", "", "必填。直接打字,按 Alt+Enter 換行;貼上網址會自動變成連結。開頭問候與結尾署名系統會自動加,不用寫。"],
+    ["按鈕文字", "", "可不填。例如:看完整說明"],
+    ["按鈕連結", "", "可不填。填了按鈕文字就要填連結(https:// 開頭)"],
+    ["收件對象", WHO.ALL, "下拉選擇"],
+    ["對象條件", "", "選「單位名稱包含關鍵字」時填關鍵字;選「指定 Email」時填 Email,多個用逗號分隔"],
+    ["上次寄出", "", "系統自動填寫,請勿修改"]
+  ]);
+  sh.getRange(1, 1, 1, 3).setFontWeight("bold").setBackground("#0d9488").setFontColor("#ffffff");
+  sh.getRange(2, 1, 7, 1).setFontWeight("bold");
+  sh.getRange(CP.who, 2).setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList([WHO.ALL, WHO.ORG, WHO.EMAIL], true).setAllowInvalid(false).build());
+  sh.setColumnWidth(1, 100); sh.setColumnWidth(2, 520); sh.setColumnWidth(3, 420);
+  sh.getRange(1, 2, 8, 2).setWrap(true); sh.getRange(1, 1, 8, 3).setVerticalAlignment("top"); sh.setRowHeight(CP.body, 220);
+  return sh;
+}
+
+function readCompose_() {
+  const sh = compose_(), g = (r) => String(sh.getRange(r, 2).getValue() || "").trim();
+  const m = { sh: sh, subject: g(CP.subject).replace(/[\r\n]+/g, " ").slice(0, 120), body: g(CP.body), btnText: g(CP.btnText), btnUrl: g(CP.btnUrl), who: g(CP.who) || WHO.ALL, cond: g(CP.cond) };
+  if (!m.subject || !m.body) throw new Error("請先在「主動發送」工作表填寫主旨與內文。");
+  if (m.btnText && !/^https:\/\/\S+$/.test(m.btnUrl)) throw new Error("有填按鈕文字時,按鈕連結必須是 https:// 開頭的網址。");
+  if (!m.btnText) m.btnUrl = "";
+  if (m.who !== WHO.ALL && !m.cond) throw new Error("收件對象選了「" + m.who + "」,請填寫「對象條件」。");
+  m.fullSubject = "【Allan's ISMS智庫】" + m.subject;
+  m.hash = Utilities.base64Encode(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, m.subject + "\n" + m.body + "\n" + m.who + "\n" + m.cond, Utilities.Charset.UTF_8)).slice(0, 12);
+  return m;
+}
+
+/* 收件人一律限於「核准」的訂閱者:沒同意訂閱的人不會收到 */
+function recipients_(m) {
+  const sh = list_(), rows = sh.getLastRow() < 2 ? [] : sh.getRange(2, 1, sh.getLastRow() - 1, HEAD.length).getValues();
+  const want = m.who === WHO.EMAIL ? m.cond.split(/[\s,;,、]+/).map((s) => s.trim().toLowerCase()).filter(String) : [];
+  const key = m.cond.toLowerCase(), out = [], seen = {};
+  rows.forEach((v, i) => {
+    const email = String(v[C.email - 1]).trim().toLowerCase();
+    if (v[C.status - 1] !== ST.OK || !isEmail_(email) || seen[email]) return;
+    if (m.who === WHO.ORG && String(v[C.org - 1]).toLowerCase().indexOf(key) < 0) return;
+    if (m.who === WHO.EMAIL && want.indexOf(email) < 0) return;
+    seen[email] = 1; out.push({ row: i + 2, email: email, name: String(v[C.name - 1] || "").replace(/^'/, ""), token: v[C.token - 1] });
+  });
+  return { list: out, skipped: want.filter((e) => !seen[e]) };
+}
+
+function esc_(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+
+function customMail_(m, name, unsub) {
+  const hi = (name ? name + " " : "") + "您好,";
+  const text = hi + "\n\n" + m.body + (m.btnText ? "\n\n→ " + m.btnText + ":" + m.btnUrl : "") +
+    "\n\n進入智庫:" + CFG.HOME + "\n\n--\n" + CFG.SENDER_NAME + "\n" + CFG.CONTACT +
+    "\n\n您會收到這封信,是因為您訂閱了 Allan's ISMS智庫。取消訂閱:" + unsub + "\n";
+  const F = "font-family:'Microsoft JhengHei','PingFang TC','Noto Sans TC',sans-serif;";
+  const para = esc_(m.body).replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?,。;:!?、)」』])/g, '<a href="$1" style="color:#0d7a70">$1</a>')
+    .split(/\n{2,}/).map((p) => '<p style="margin:0 0 14px">' + p.replace(/\n/g, "<br>") + "</p>").join("");
+  const html = '<!doctype html><html lang="zh-Hant"><body style="margin:0;padding:0;background:#eef2f9">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eef2f9"><tr><td align="center" style="padding:18px 10px">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:640px;background:#ffffff;border-radius:18px;overflow:hidden">' +
+    '<tr><td style="background:#0d9488;padding:12px 24px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="' + F + 'color:#ffffff;font-size:17px;font-weight:bold">🛡️ Allan\'s ISMS智庫</td>' +
+    '<td align="right"><span style="' + F + 'display:inline-block;background:#ffffff;color:#0d9488;font-size:13px;font-weight:bold;padding:3px 12px;border-radius:999px">顧問通知</span></td></tr></table></td></tr>' +
+    '<tr><td style="background:#12224f;padding:22px 24px"><div style="' + F + 'color:#ffffff;font-size:23px;font-weight:bold;line-height:1.4">' + esc_(m.subject) + "</div></td></tr>" +
+    '<tr><td style="' + F + 'padding:24px 24px 6px;font-size:15.5px;line-height:1.8;color:#17264f"><p style="margin:0 0 14px">' + esc_(hi) + "</p>" + para + "</td></tr>" +
+    (m.btnText ? '<tr><td style="padding:0 24px 10px"><table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="background:#f59e0b;border-radius:999px;padding:11px 24px"><a href="' + esc_(m.btnUrl) + '" style="' + F + 'color:#1a1300;font-size:15px;font-weight:bold;text-decoration:none">' + esc_(m.btnText) + " →</a></td></tr></table></td></tr>" : "") +
+    '<tr><td style="padding:12px 24px 0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f6f8fc;border-radius:14px"><tr><td width="56" valign="top" style="padding:16px 0 16px 18px;font-size:34px;line-height:1">👨‍🏫</td>' +
+    '<td style="' + F + 'padding:16px 18px;font-size:14.5px;line-height:1.7;color:#17264f"><b style="font-size:16px">Allan Lo</b> <span style="color:#5d6d92">ISMS智庫顧問</span><br>✉️ <a href="mailto:' + CFG.CONTACT + '" style="color:#0d9488">' + CFG.CONTACT + '</a> &nbsp; 🔎 <a href="' + CFG.HOME + '" style="color:#0d9488">進入智庫</a></td></tr></table></td></tr>' +
+    '<tr><td style="' + F + 'padding:16px 24px 24px;font-size:12.5px;line-height:1.7;color:#5d6d92">您會收到這封信,是因為您訂閱了 Allan\'s ISMS智庫。不想再收到?<a href="' + unsub + '" style="color:#5d6d92">取消訂閱</a></td></tr>' +
+    "</table></td></tr></table></body></html>";
+  return { text: text, html: html };
+}
+
+function previewCustom() {
+  const ui = SpreadsheetApp.getUi(), m = readCompose_(), r = recipients_(m), me = Session.getActiveUser().getEmail();
+  const mail = customMail_(m, "(收件人姓名)", CFG.SITE + "subscribe.html");
+  GmailApp.sendEmail(me, "[預覽] " + m.fullSubject, mail.text, { htmlBody: mail.html, name: CFG.SENDER_NAME, replyTo: CFG.CONTACT });
+  ui.alert("已寄出預覽 ✅\n\n主旨:" + m.fullSubject + "\n預覽寄到:" + me + "\n\n正式寄出時的收件人:" + r.list.length + " 位(" + m.who + (m.cond ? ":" + m.cond : "") + ")" +
+    (r.skipped.length ? "\n\n⚠ 以下 Email 不在核准名單內,不會寄送:\n" + r.skipped.join("\n") : ""));
+}
+
+function sendCustom() {
+  const ui = SpreadsheetApp.getUi(), m = readCompose_(), r = recipients_(m);
+  if (!r.list.length) return ui.alert("沒有符合條件的收件人。\n\n收件對象:" + m.who + (m.cond ? "(" + m.cond + ")" : "") + "\n只有狀態為「核准」的訂閱者會收到。");
+  const quota = MailApp.getRemainingDailyQuota();
+  if (quota < r.list.length) return ui.alert("今日剩餘寄信額度只有 " + quota + " 封,不足以寄給 " + r.list.length + " 人。");
+  const last = String(m.sh.getRange(CP.last, 2).getValue() || "");
+  if (last.indexOf("#" + m.hash) >= 0 && ui.alert("這封信已經寄過", "相同主旨、內文與對象的信已寄出過:\n" + last + "\n\n確定要再寄一次嗎?", ui.ButtonSet.OK_CANCEL) !== ui.Button.OK) return;
+  if (ui.alert("確認寄出", "主旨:" + m.fullSubject + "\n收件人:" + r.list.length + " 位(" + m.who + (m.cond ? ":" + m.cond : "") + ")" +
+    (r.skipped.length ? "\n不在核准名單、不會寄送:" + r.skipped.join("、") : "") + "\n\n寄出後無法收回。確定嗎?", ui.ButtonSet.OK_CANCEL) !== ui.Button.OK) return;
+  let ok = 0; const fail = [];
+  r.list.forEach((t) => {
+    try {
+      let token = t.token; if (!token) { token = newToken_(); list_().getRange(t.row, C.token).setValue(token); }
+      const mail = customMail_(m, t.name, unsubUrl_(token));
+      GmailApp.sendEmail(t.email, m.fullSubject, mail.text, { htmlBody: mail.html, name: CFG.SENDER_NAME, replyTo: CFG.CONTACT });
+      ok++;
+    } catch (err) { fail.push(t.email + ":" + err.message); }
+  });
+  const now = new Date();
+  m.sh.getRange(CP.last, 2).setValue(Utilities.formatDate(now, Session.getScriptTimeZone(), "yyyy/MM/dd HH:mm") + " 寄給 " + ok + " 位 #" + m.hash);
+  SpreadsheetApp.getActive().getSheetByName(CFG.LOG).appendRow([now, "主動發送", m.subject, ok, fail.length, m.who + (m.cond ? ":" + m.cond : "") + (fail.length ? ";失敗:" + fail.join(";") : "")]);
+  ui.alert("寄送完成\n\n成功:" + ok + " 封\n失敗:" + fail.length + " 封" + (fail.length ? "\n\n" + fail.join("\n") : ""));
 }
 
 function showStats() {
