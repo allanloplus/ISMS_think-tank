@@ -187,8 +187,8 @@ function sendIssue() {
 }
 
 function sendIssueMail_(to, subject, m, unsub) {
-  GmailApp.sendEmail(to, subject, m.text.split("{{UNSUBSCRIBE}}").join(unsub),
-    { htmlBody: m.html.split("{{UNSUBSCRIBE}}").join(unsub), name: CFG.SENDER_NAME, replyTo: CFG.CONTACT });
+  MailApp.sendEmail(to, subject, m.text.split("{{UNSUBSCRIBE}}").join(unsub),
+    { htmlBody: ent_(m.html.split("{{UNSUBSCRIBE}}").join(unsub)), name: CFG.SENDER_NAME, replyTo: CFG.CONTACT });
 }
 
 /* ───────── 主動發送:隨時寫一封信寄給訂閱者(重大弱點提醒、活動通知…) ───────── */
@@ -247,6 +247,9 @@ function recipients_(m) {
   return { list: out, skipped: want.filter((e) => !seen[e]) };
 }
 
+/* emoji 等超出基本字元平面的字,直接放進 HTML 信件會被寄信服務弄成亂碼(�);轉成 &#數字; 的純 ASCII 寫法就不受影響 */
+function ent_(html) { return String(html).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function (c) { return "&#" + c.codePointAt(0) + ";"; }); }
+
 function esc_(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
 
 function customMail_(m, name, unsub) {
@@ -275,7 +278,7 @@ function customMail_(m, name, unsub) {
 function previewCustom() {
   const ui = SpreadsheetApp.getUi(), m = readCompose_(), r = recipients_(m), me = Session.getActiveUser().getEmail();
   const mail = customMail_(m, "(收件人姓名)", CFG.SITE + "subscribe.html");
-  GmailApp.sendEmail(me, "[預覽] " + m.fullSubject, mail.text, { htmlBody: mail.html, name: CFG.SENDER_NAME, replyTo: CFG.CONTACT });
+  MailApp.sendEmail(me, "[預覽] " + m.fullSubject, mail.text, { htmlBody: ent_(mail.html), name: CFG.SENDER_NAME, replyTo: CFG.CONTACT });
   ui.alert("已寄出預覽 ✅\n\n主旨:" + m.fullSubject + "\n預覽寄到:" + me + "\n\n正式寄出時的收件人:" + r.list.length + " 位(" + m.who + (m.cond ? ":" + m.cond : "") + ")" +
     (r.skipped.length ? "\n\n⚠ 以下 Email 不在核准名單內,不會寄送:\n" + r.skipped.join("\n") : ""));
 }
@@ -294,7 +297,7 @@ function sendCustom() {
     try {
       let token = t.token; if (!token) { token = newToken_(); list_().getRange(t.row, C.token).setValue(token); }
       const mail = customMail_(m, t.name, unsubUrl_(token));
-      GmailApp.sendEmail(t.email, m.fullSubject, mail.text, { htmlBody: mail.html, name: CFG.SENDER_NAME, replyTo: CFG.CONTACT });
+      MailApp.sendEmail(t.email, m.fullSubject, mail.text, { htmlBody: ent_(mail.html), name: CFG.SENDER_NAME, replyTo: CFG.CONTACT });
       ok++;
     } catch (err) { fail.push(t.email + ":" + err.message); }
   });
@@ -324,7 +327,7 @@ function safe_(s) { return /^[=+\-@]/.test(s) ? "'" + s : s; }               // 
 function newToken_() { return (Utilities.getUuid() + Utilities.getUuid()).replace(/-/g, "").slice(0, 40); }
 function unsubUrl_(token) { return CFG.SITE + "subscribe.html?u=" + token; }
 function json_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
-function send_(to, subject, body) { GmailApp.sendEmail(to, subject, body, { name: CFG.SENDER_NAME, replyTo: CFG.CONTACT }); }
+function send_(to, subject, body) { MailApp.sendEmail(to, subject, body, { name: CFG.SENDER_NAME, replyTo: CFG.CONTACT }); }
 function throttle_(key, seconds) { const c = CacheService.getScriptCache(); if (c.get(key)) return false; c.put(key, "1", seconds); return true; }
 function hourlyOk_() { const c = CacheService.getScriptCache(), k = "h:" + Utilities.formatDate(new Date(), "UTC", "yyyyMMddHH"), n = Number(c.get(k) || 0); if (n >= CFG.HOURLY_CAP) return false; c.put(k, String(n + 1), 3600); return true; }
 function notifyOwner_(email, name, org, kind) {

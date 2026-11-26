@@ -105,8 +105,10 @@ ${card("🏢", "近期重要資安情資", "民間企業必看", K.teal, K.tealB
 </body></html>
 `;
 
+// emoji 轉成 &#數字;:直接放進 HTML 信件會被部分寄信服務弄成亂碼
+const htmlOut = html.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, (c) => "&#" + c.codePointAt(0) + ";");
 const out = path.join(root, "mail"); fs.mkdirSync(out, { recursive: true });
 fs.writeFileSync(path.join(out, I.id + ".txt"), `主旨:${subject}\n寄件人:${C.title} ${C.name} <${C.email}>\n${"─".repeat(30)}\n` + text);
-fs.writeFileSync(path.join(out, I.id + ".html"), html);
-fs.writeFileSync(path.join(out, "latest.json"), JSON.stringify({ issue: I.id, label: I.label, published: I.published, subject, from: { name: `${C.title} ${C.name}`, email: C.email }, text, html }, null, 1));
+fs.writeFileSync(path.join(out, I.id + ".html"), htmlOut);
+fs.writeFileSync(path.join(out, "latest.json"), JSON.stringify({ issue: I.id, label: I.label, published: I.published, subject, from: { name: `${C.title} ${C.name}`, email: C.email }, text, html: htmlOut }, null, 1));
 console.log(`mail/${I.id}.txt、.html、latest.json 已產生\n主旨:${subject}`);
