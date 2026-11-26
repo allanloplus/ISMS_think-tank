@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="zh-Hant" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>訂閱每月電子報｜Allan's ISMS智庫</title>
+<meta name="description" content="申請或取消訂閱 Allan's ISMS智庫每月電子報。訂閱需經 Allan 顧問確認。">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f3f6fc">
+<link rel="icon" type="image/png" href="assets/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+.sub-wrap{max-width:760px;margin:0 auto;padding:96px 18px 70px}
+.sub-head{display:flex;gap:18px;align-items:center;margin-bottom:22px}
+.sub-head img{width:96px;height:96px;object-fit:cover;object-position:top;border-radius:50%;background:var(--ava);border:3px solid var(--teal);flex:none}
+.sub-head h1{font-size:clamp(24px,5vw,34px);margin:0 0 4px} .sub-head p{margin:0;color:var(--mut)}
+.sub-card{margin-bottom:18px} .sub-card h2{font-size:20px;margin-bottom:6px}
+.fld{display:block;margin:14px 0 0} .fld span{display:block;font-size:14px;font-weight:500;margin-bottom:5px}
+.fld input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg2);color:var(--tx);font:inherit;font-size:16px;outline:0}
+.fld input:focus{border-color:var(--teal);box-shadow:0 0 0 4px rgba(var(--tc),.15)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.agree{display:flex;gap:10px;align-items:flex-start;margin:16px 0 4px;font-size:14.5px;line-height:1.6} .agree input{width:18px;height:18px;margin-top:3px;accent-color:var(--teal);flex:none}
+.notice{font-size:13.5px;color:var(--tx2);background:rgba(var(--ovc),.05);border-radius:12px;padding:12px 16px;margin-top:14px} .notice summary{cursor:pointer;font-weight:700} .notice ul{margin:8px 0 0;padding-left:20px} .notice li{margin-bottom:4px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0 0;padding:0;list-style:none;counter-reset:s}
+.steps li{counter-increment:s;font-size:13.5px;line-height:1.5;padding:12px;border-radius:12px;background:rgba(var(--tc),.08)} .steps li::before{content:counter(s);display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--teal);color:var(--on-accent);font:700 13px var(--fn);margin-bottom:6px}
+.msg{margin-top:14px;padding:12px 16px;border-radius:12px;font-weight:500;display:none} .msg.ok{display:block;background:rgba(52,211,153,.16);color:var(--ok)} .msg.ng{display:block;background:rgba(251,113,133,.14);color:var(--d3)}
+.btn[disabled]{opacity:.5;cursor:default;transform:none;box-shadow:none} .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:16px}
+.back{display:inline-block;margin-top:8px;font-size:14.5px}
+@media(max-width:640px){.steps{grid-template-columns:1fr}.sub-head img{width:72px;height:72px}.sub-wrap{padding-top:84px}}
+</style>
+</head>
+<body>
+<header class="nav solid">
+  <a class="brand" href="./"><span class="brand-mark">A</span><span>Allan's <b>ISMS智庫</b></span></a>
+  <a class="nav-search" style="margin-left:auto;text-decoration:none" href="./">← 回智庫首頁</a>
+</header>
+
+<main class="sub-wrap">
+  <div class="sub-head">
+    <img id="face" src="assets/img/chars/arale-wink.webp" alt="AI 助理阿拉雷">
+    <div><h1>📬 每月電子報</h1><p>新一期智庫發行時,寄一封文字摘要給你:本期焦點、法規異動、資安情資,點連結就能進智庫看完整內容。</p></div>
+  </div>
+
+  <!-- 取消訂閱(信尾連結帶 ?u= 進來時顯示) -->
+  <section class="card sub-card" id="unsubBox" hidden>
+    <h2>取消訂閱</h2>
+    <p>按下確認後,就不會再收到 Allan's ISMS智庫的每月電子報。之後想再訂閱,隨時可以重新申請。</p>
+    <div class="row"><button class="btn" id="unsubBtn">確認取消訂閱</button><a href="./">不取消,回智庫</a></div>
+    <div class="msg" id="unsubMsg"></div>
+  </section>
+
+  <section class="card sub-card" id="applyBox">
+    <h2>申請訂閱</h2>
+    <p class="muted">本電子報僅提供 Allan 顧問的客戶,或經顧問同意的對象訂閱。</p>
+    <ol class="steps"><li>填寫下方資料送出</li><li>Allan 顧問確認身分後開通</li><li>收到「訂閱已開通」通知信,之後每月寄送</li></ol>
+    <form id="applyForm" novalidate>
+      <label class="fld"><span>姓名</span><input name="name" required maxlength="40" autocomplete="name"></label>
+      <label class="fld"><span>服務單位(機關/公司名稱)</span><input name="org" required maxlength="60" autocomplete="organization"></label>
+      <label class="fld"><span>Email(建議填公務信箱,方便確認身分)</span><input name="email" type="email" required maxlength="120" autocomplete="email" inputmode="email"></label>
+      <label class="hp" aria-hidden="true">請勿填寫<input name="website" tabindex="-1" autocomplete="off"></label>
+      <details class="notice" open>
+        <summary>個人資料蒐集告知事項</summary>
+        <ul>
+          <li><b>蒐集者:</b>ISMS智庫顧問 Allan Lo(<span class="ct-mail"></span>)。</li>
+          <li><b>目的:</b>確認訂閱資格,以及寄送每月電子報與訂閱相關通知。</li>
+          <li><b>項目:</b>姓名、服務單位、Email。</li>
+          <li><b>利用期間、地區、對象及方式:</b>自申請日起至你取消訂閱為止;由顧問本人利用,資料存放於顧問的 Google Workspace 帳號,不提供給其他第三人。</li>
+          <li><b>你的權利:</b>可隨時來信查詢、閱覽、更正、要求停止利用或刪除;每封信尾都有取消訂閱連結。</li>
+          <li><b>不提供的影響:</b>無法確認訂閱資格,因此無法為你開通。</li>
+        </ul>
+      </details>
+      <label class="agree"><input type="checkbox" name="consent" required><span>我已閱讀並同意上述個人資料告知事項,並同意收到 Allan's ISMS智庫每月電子報。</span></label>
+      <div class="row"><button class="btn big" type="submit" id="applyBtn">送出申請</button></div>
+      <div class="msg" id="applyMsg"></div>
+    </form>
+  </section>
+
+  <section class="card sub-card" id="reqBox">
+    <h2>想取消訂閱?</h2>
+    <p class="muted">每封電子報最下方都有「取消訂閱」連結,點了就能取消。找不到信的話,在這裡輸入訂閱的 Email,我們會把取消連結寄到那個信箱。</p>
+    <form id="reqForm" novalidate>
+      <label class="fld"><span>訂閱時使用的 Email</span><input name="email" type="email" required maxlength="120" inputmode="email"></label>
+      <label class="hp" aria-hidden="true">請勿填寫<input name="website" tabindex="-1" autocomplete="off"></label>
+      <div class="row"><button class="btn ghost" type="submit" id="reqBtn">寄取消連結給我</button></div>
+      <div class="msg" id="reqMsg"></div>
+    </form>
+  </section>
+
+  <p class="muted small">有任何問題,歡迎來信 <a class="ct-link" href="#"></a>。</p>
+  <a class="back" href="./">← 回 Allan's ISMS智庫</a>
+</main>
+
+<script src="data/manifest.js"></script>
+<script>
+(function () {
+  "use strict";
+  var M = window.TT.manifest, API = M.subscribeApi || "", mail = M.contact.email;
+  var $ = function (s) { return document.querySelector(s); };
+  document.querySelectorAll(".ct-mail").forEach(function (e) { e.textContent = mail; });
+  var l = $(".ct-link"); l.textContent = mail; l.href = "mailto:" + mail;
+  var face = function (f) { $("#face").src = "assets/img/chars/arale-" + f + ".webp"; };
+  function show(el, ok, text) { el.className = "msg " + (ok ? "ok" : "ng"); el.textContent = text; face(ok ? "cheer" : "confused"); }
+  var notReady = "訂閱功能尚在準備中,請直接來信 " + mail + " 申請。";
+
+  // 送到 Google Apps Script。用表單編碼的簡單請求,不需要額外的跨網域設定。
+  function call(data) {
+    if (!API) return Promise.resolve({ ok: false, msg: notReady });
+    return fetch(API, { method: "POST", body: new URLSearchParams(data) })
+      .then(function (r) { return r.json(); })
+      .catch(function () { return { ok: false, msg: "連線失敗,請稍後再試,或直接來信 " + mail + "。" }; });
+  }
+  function busy(btn, on, text) { btn.disabled = on; if (on) { btn.dataset.t = btn.textContent; btn.textContent = text; } else if (btn.dataset.t) btn.textContent = btn.dataset.t; }
+
+  // 取消訂閱:信尾連結帶 ?u=取消碼。一定要再按一次確認,避免信箱的連結掃描器誤觸取消。
+  var token = new URLSearchParams(location.search).get("u");
+  if (token) {
+    $("#unsubBox").hidden = false; $("#applyBox").hidden = true; $("#reqBox").hidden = true; face("think");
+    $("#unsubBtn").onclick = function () {
+      var b = this; busy(b, true, "處理中…");
+      call({ action: "unsubscribe", token: token }).then(function (r) {
+        if (r.ok) { show($("#unsubMsg"), true, "已取消訂閱,之後不會再寄電子報給你。謝謝你這段時間的閱讀!"); b.hidden = true; face("cry"); }
+        else { show($("#unsubMsg"), false, r.msg || "取消失敗,請來信 " + mail + "。"); busy(b, false); }
+      });
+    };
+  }
+
+  $("#applyForm").onsubmit = function (e) {
+    e.preventDefault();
+    var f = e.target, m = $("#applyMsg"), b = $("#applyBtn");
+    var d = { action: "apply", name: f.name.value.trim(), org: f.org.value.trim(), email: f.email.value.trim(), website: f.website.value, consent: f.consent.checked ? "1" : "" };
+    if (!d.name || !d.org) return show(m, false, "請填寫姓名與服務單位。");
+    if (!/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(d.email)) return show(m, false, "Email 格式不正確,請再確認。");
+    if (!d.consent) return show(m, false, "請先勾選同意個人資料告知事項。");
+    busy(b, true, "送出中…");
+    call(d).then(function (r) {
+      if (r.ok) { show(m, true, "已收到你的申請!Allan 顧問確認身分後會為你開通,屆時會寄一封「訂閱已開通」通知信到 " + d.email + "。"); f.reset(); b.hidden = true; }
+      else { show(m, false, r.msg || "送出失敗,請稍後再試。"); busy(b, false); }
+    });
+  };
+
+  $("#reqForm").onsubmit = function (e) {
+    e.preventDefault();
+    var f = e.target, m = $("#reqMsg"), b = $("#reqBtn"), email = f.email.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(email)) return show(m, false, "Email 格式不正確,請再確認。");
+    busy(b, true, "處理中…");
+    call({ action: "unsubscribeRequest", email: email, website: f.website.value }).then(function (r) {
+      if (r.ok) { show(m, true, "如果這個 Email 在訂閱名單內,取消連結已寄出,請到信箱點連結完成取消。"); f.reset(); face("explain"); }
+      else show(m, false, r.msg || "處理失敗,請稍後再試。");
+      busy(b, false);
+    });
+  };
+})();
+</script>
+</body>
+</html>

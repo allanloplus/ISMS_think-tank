@@ -301,7 +301,8 @@ h1{font-size:clamp(32px,4.5vw,56px);font-weight:900;letter-spacing:-.01em}
 .arc-btns{display:flex;gap:8px;align-items:center;font-size:13px} .arc-btns a{padding:4px 12px;border-radius:99px;border:1px solid var(--line);text-decoration:none;white-space:nowrap} .arc-btns a:hover{border-color:var(--teal)} .arc-btns em{font-style:normal;color:var(--mut)}
 
 /* FOOT / BUDDY */
-.foot{text-align:center;padding:50px 20px 110px;color:var(--mut);font-size:14px} .foot-credit{margin-top:8px;color:var(--tx)} .foot-note{font-size:12.5px;margin-top:6px;opacity:.8}
+.foot{text-align:center;padding:50px 20px 110px;color:var(--mut);font-size:14px} .nav-links a.nav-sub{color:var(--teal);font-weight:700} .foot-sub{margin:14px 0 4px}
+.foot-credit{margin-top:8px;color:var(--tx)} .foot-note{font-size:12.5px;margin-top:6px;opacity:.8}
 .buddy{position:fixed;right:18px;bottom:18px;z-index:40;display:flex;align-items:flex-end;gap:10px;pointer-events:none}
 .buddy-btn{pointer-events:auto;width:76px;height:76px;border-radius:50%;overflow:hidden;border:3px solid var(--teal);background:var(--ava);box-shadow:0 8px 30px rgba(34,211,238,.4);transition:.2s;padding:0}
 .buddy-btn:hover{transform:scale(1.08)} .buddy-btn img{width:100%;height:100%;object-fit:cover;object-position:top} .buddy-btn img.hop{animation:hop .5s}
@@ -432,6 +433,7 @@ h1{font-size:clamp(32px,4.5vw,56px);font-weight:900;letter-spacing:-.01em}
     <a href="#internal">內部 ISMS</a>
     <a href="#external">外部法規</a>
     <a href="#intel">情資雷達</a>
+    <a class="nav-sub" href="https://allanloplus.github.io/ISMS_think-tank/subscribe.html">📬 訂閱</a>
   </nav>
   <label class="issue-sel" title="切換期別"><span>期別</span><select id="issueSel" aria-label="切換期別"></select></label>
   <button class="nav-search" id="navSearch" aria-label="搜尋"><svg viewBox="0 0 24 24" width="18" height="18"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>搜尋</span><kbd>/</kbd></button>
@@ -483,6 +485,7 @@ h1{font-size:clamp(32px,4.5vw,56px);font-weight:900;letter-spacing:-.01em}
 
 <footer class="foot">
   <div><b>Allan's ISMS智庫</b> · <span id="footIssue"></span></div>
+  <div class="foot-sub"><a class="btn ghost" href="https://allanloplus.github.io/ISMS_think-tank/subscribe.html">📬 訂閱每月電子報</a></div>
   <div class="foot-credit">系統設計:Allan Lo 顧問 · Allan's 分享:<a href="https://www.123hi.org" target="_blank" rel="noopener">www.123hi.org</a></div>
   <div class="foot-note">本智庫內容為教育宣導用途;「烏托邦機關」為模擬組織。法規以主管機關公告之最新版本為準。</div>
 </footer>
@@ -518,6 +521,8 @@ window.TT = window.TT || {};
 TT.manifest = {
   site: "Allan's ISMS智庫",
   url: "https://allanloplus.github.io/ISMS_think-tank/",
+  /* 訂閱 API:Google Apps Script 網頁應用程式網址(設定方式見 subscription/README.md);留空時訂閱頁會請讀者改用來信申請 */
+  subscribeApi: "",
   contact: { title: "ISMS智庫顧問", name: "Allan Lo", email: "isms@123hi.org", web: "https://www.123hi.org" },
   current: "2026-11",
   issues: [
@@ -1910,6 +1915,7 @@ TT.issue = {
         <div class="card rv"><h3>歷期智庫</h3><div class="archive">${TT.manifest.issues.map((m) => `<div class="arc ${m.id === I.id ? "on" : ""}"><div><b>${esc(m.label)}${m.id === TT.manifest.current ? ' <i class="new">最新</i>' : ""}</b><span>${esc(m.topic)} · ${m.gameIcon || "🎮"} ${esc(m.game)}</span></div>
           ${TT.inline ? "" : `<div class="arc-btns">${m.id === I.id ? "<em>目前顯示</em>" : `<a href="${m.id === TT.manifest.current ? location.pathname : "?issue=" + m.id}">線上看</a>`}<a href="dist/Allans-ISMS-ThinkTank-${m.id}.html" target="_blank" rel="noopener" title="當月完整封存版,含當時的法規庫與內部文件">單檔封存版 ↗</a></div>`}</div>`).join("")}</div>
         <p class="muted small">線上版的法規庫與內部文件一律顯示最新狀態;要看當月原貌請開「單檔封存版」。</p>
+        <p><a class="btn ghost" href="${TT.inline ? TT.manifest.url : ""}subscribe.html">📬 訂閱每月電子報</a></p>
         <p class="muted small">系統設計:Allan Lo 顧問,每月彙整法規異動與情資後發行。Allan\'s 分享:<a href="https://www.123hi.org" target="_blank" rel="noopener">www.123hi.org</a></p></div>
       </div>`;
   }

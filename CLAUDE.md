@@ -16,6 +16,9 @@
 | `assets/js/games/*.js` | 小遊戲模組,每月新增一個 | 每月 |
 | `tools/make_og.js` | 產生 `og-image.png` 分享縮圖與 favicon | 每月執行 |
 | `tools/build_single.py` | 打包單一 HTML 到 `dist/`(可離線、可傳檔) | 每月執行 |
+| `tools/make_mail.js` | 產生訂閱信 `mail/<期別>.txt/.html` 與 `mail/latest.json`(Apps Script 寄送時讀這個檔) | 每月執行 |
+| `subscribe.html` | 申請/取消訂閱頁;呼叫 `manifest.js` 的 `subscribeApi` | 通常不動 |
+| `subscription/` | Google Apps Script 原始碼與設定說明(名單在 Allan 的 Google 試算表,不在 repo) | 通常不動 |
 | `sources/YYYY-MM/` | 當期引用的原始文件(指引 PDF 等) | 每月 |
 
 ## 每月更新 SOP(Allan 說「出下一期」時照做)
@@ -47,7 +50,7 @@
    ```
    訂閱信內容全部取自期別檔,連結一律帶 `?issue=YYYY-MM`;聯絡資訊在 `manifest.js` 的 `contact`。訂閱名單與寄送不在本 repo(名單屬個資,不可提交進來)。
 10. **測試**:本機 `python3 -m http.server` 用瀏覽器實測——試算/互動元件、遊戲整局、搜尋、手機寬度 390px 無橫向捲動、console 無錯誤。看過截圖再交付。
-11. commit、push;回報本期內容摘要與「待覆核」清單。
+11. commit、push;回報本期內容摘要與「待覆核」清單,並提醒 Allan:合併上線後到訂閱名單試算表先「預覽本期」再「發送本期」。
 
 ## 期別呈現規則(已內建,不需每月處理)
 

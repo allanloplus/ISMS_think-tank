@@ -399,6 +399,7 @@
         <div class="card rv"><h3>歷期智庫</h3><div class="archive">${TT.manifest.issues.map((m) => `<div class="arc ${m.id === I.id ? "on" : ""}"><div><b>${esc(m.label)}${m.id === TT.manifest.current ? ' <i class="new">最新</i>' : ""}</b><span>${esc(m.topic)} · ${m.gameIcon || "🎮"} ${esc(m.game)}</span></div>
           ${TT.inline ? "" : `<div class="arc-btns">${m.id === I.id ? "<em>目前顯示</em>" : `<a href="${m.id === TT.manifest.current ? location.pathname : "?issue=" + m.id}">線上看</a>`}<a href="dist/Allans-ISMS-ThinkTank-${m.id}.html" target="_blank" rel="noopener" title="當月完整封存版,含當時的法規庫與內部文件">單檔封存版 ↗</a></div>`}</div>`).join("")}</div>
         <p class="muted small">線上版的法規庫與內部文件一律顯示最新狀態;要看當月原貌請開「單檔封存版」。</p>
+        <p><a class="btn ghost" href="${TT.inline ? TT.manifest.url : ""}subscribe.html">📬 訂閱每月電子報</a></p>
         <p class="muted small">系統設計:Allan Lo 顧問,每月彙整法規異動與情資後發行。Allan\'s 分享:<a href="https://www.123hi.org" target="_blank" rel="noopener">www.123hi.org</a></p></div>
       </div>`;
   }
