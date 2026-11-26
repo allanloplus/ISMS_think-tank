@@ -5,7 +5,7 @@ TT.manifest = {
   site: "Allan's ISMS智庫",
   url: "https://allanloplus.github.io/ISMS_think-tank/",
   /* 訂閱 API:Google Apps Script 網頁應用程式網址(設定方式見 subscription/README.md);留空時訂閱頁會請讀者改用來信申請 */
-  subscribeApi: "",
+  subscribeApi: "https://script.google.com/macros/s/AKfycbyfpOY80A2Epvc5c_CoS0IqkNc3VDoKo1cm8jMhI98DgN518YTal0PQzCJ75ipFC2M0IQ/exec",
   contact: { title: "ISMS智庫顧問", name: "Allan Lo", email: "isms@123hi.org", web: "https://www.123hi.org" },
   current: "2026-11",
   issues: [
