@@ -31,7 +31,8 @@ function onOpen() {
     .addItem("① 初始化(第一次使用)", "setup")
     .addSeparator()
     .addItem("預覽本期(只寄給我自己)", "sendPreview")
-    .addItem("發送本期給所有「核准」的訂閱者", "sendIssue")
+    .addItem("發送本期給所有還沒收過的「核准」訂閱者", "sendIssue")
+    .addItem("發送本期給選取的列", "sendIssueToSelection")
     .addSeparator()
     .addItem("主動發送:開啟撰寫表", "openCompose")
     .addItem("主動發送:預覽(只寄給我自己)", "previewCustom")
@@ -163,18 +164,39 @@ function sendPreview() {
   ui.alert("已寄出預覽 ✅\n\n期別:" + m.label + "\n主旨:" + m.subject + "\n收件人:" + me + "\n\n確認內容與連結都正確後,再執行「發送本期」。");
 }
 
-function sendIssue() {
+function sendIssue() { sendIssue_(null); }
+
+/* 只寄給在「訂閱名單」選取的那幾列(例如剛手動加入的人)。可以選一格、整列或按住 Ctrl 複選多列。 */
+function sendIssueToSelection() {
+  const ui = SpreadsheetApp.getUi(), sh = SpreadsheetApp.getActive().getActiveSheet();
+  if (sh.getName() !== CFG.LIST) return ui.alert("請先切到「" + CFG.LIST + "」工作表,選取要寄送的人(點那一列的任何一格;按住 Ctrl 可複選),再執行這個功能。");
+  const rows = {};
+  sh.getActiveRangeList().getRanges().forEach((g) => { for (let r = g.getRow(); r < g.getRow() + g.getNumRows(); r++) if (r >= 2 && r <= sh.getLastRow()) rows[r] = 1; });
+  if (!Object.keys(rows).length) return ui.alert("沒有選到任何訂閱者。請選取名單中要寄送的那幾列。");
+  sendIssue_(rows);
+}
+
+/* only = null:寄給所有「核准」且還沒收過本期的人;only = {列號:1,…}:只寄給選取的列(已收過的也會再寄) */
+function sendIssue_(only) {
   const ui = SpreadsheetApp.getUi(), m = fetchIssue_(), sh = list_();
   const rows = sh.getLastRow() < 2 ? [] : sh.getRange(2, 1, sh.getLastRow() - 1, HEAD.length).getValues();
-  const todo = [];
+  const todo = [], skipped = []; let again = 0;
   rows.forEach((v, i) => {
-    const email = String(v[C.email - 1]).trim().toLowerCase();
-    if (v[C.status - 1] === ST.OK && isEmail_(email) && String(v[C.last - 1]) !== m.issue) todo.push({ row: i + 2, email: email, token: v[C.token - 1] });
+    const row = i + 2, email = String(v[C.email - 1]).trim().toLowerCase(), had = String(v[C.last - 1]) === m.issue;
+    if (only && !only[row]) return;
+    if (v[C.status - 1] !== ST.OK || !isEmail_(email)) { if (only && email) skipped.push(email + "(" + (v[C.status - 1] || "未設定狀態") + ")"); return; }
+    if (!only && had) return;
+    if (had) again++;
+    todo.push({ row: row, email: email, token: v[C.token - 1] });
   });
-  if (!todo.length) return ui.alert("沒有需要寄送的對象。\n\n「核准」的訂閱者都已收過 " + m.label + ",或名單內尚無核准的人。");
+  const skipNote = skipped.length ? "\n\n⚠ 以下不是「核准」狀態,不會寄送:\n" + skipped.join("\n") : "";
+  if (!todo.length) return ui.alert(only ? "選取的列裡沒有可寄送的對象。只有狀態為「核准」的訂閱者會收到。" + skipNote
+    : "沒有需要寄送的對象。\n\n「核准」的訂閱者都已收過 " + m.label + ",或名單內尚無核准的人。");
   const quota = MailApp.getRemainingDailyQuota();
   if (quota < todo.length) return ui.alert("今日剩餘寄信額度只有 " + quota + " 封,不足以寄給 " + todo.length + " 人。請明天再寄;已寄過的人不會重複收到。");
-  if (ui.alert("確認發送", "期別:" + m.label + "\n主旨:" + m.subject + "\n\n將寄給 " + todo.length + " 位「核准」的訂閱者。確定嗎?", ui.ButtonSet.OK_CANCEL) !== ui.Button.OK) return;
+  const names = todo.slice(0, 12).map((t) => t.email).join("\n") + (todo.length > 12 ? "\n…等共 " + todo.length + " 位" : "");
+  if (ui.alert("確認發送", "期別:" + m.label + "\n主旨:" + m.subject + "\n\n將寄給 " + todo.length + " 位" + (only ? "(選取的列)" : "尚未收過本期的「核准」訂閱者") + ":\n" + names +
+    (again ? "\n\n其中 " + again + " 位已收過本期,會再寄一次。" : "") + skipNote + "\n\n確定嗎?", ui.ButtonSet.OK_CANCEL) !== ui.Button.OK) return;
   let ok = 0; const fail = [];
   todo.forEach((t) => {
     try {
@@ -183,7 +205,7 @@ function sendIssue() {
       sh.getRange(t.row, C.last).setValue(m.issue); ok++;
     } catch (err) { fail.push(t.email + ":" + err.message); }
   });
-  SpreadsheetApp.getActive().getSheetByName(CFG.LOG).appendRow([new Date(), "發送本期", m.issue, ok, fail.length, fail.join(";")]);
+  SpreadsheetApp.getActive().getSheetByName(CFG.LOG).appendRow([new Date(), only ? "發送本期(選取的列)" : "發送本期", m.issue, ok, fail.length, fail.join(";")]);
   ui.alert("發送完成\n\n成功:" + ok + " 封\n失敗:" + fail.length + " 封" + (fail.length ? "\n\n" + fail.join("\n") + "\n\n失敗的人下次執行「發送本期」會再補寄。" : ""));
 }
 
